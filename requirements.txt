@@ -1,0 +1,19 @@
+# NETGUARD AI - Verified Python 3.12 Dependencies
+# Data processing & numerical computing
+pandas==3.1.1
+numpy==2.5.5
+
+# Machine learning & model serialization
+scikit-learn==1.9.1
+joblib==1.6.0
+
+# Visualization
+matplotlib==3.11.2
+seaborn==0.13.2
+plotly==7.2.0
+
+# Web dashboard
+streamlit==1.67.0
+
+# Testing
+pytest==9.2.0

@@ -1,0 +1,303 @@
+{
+  "cv_folds": 5,
+  "primary_scoring": "f1",
+  "n_jobs": 1,
+  "search_scope": "Stratified training subset of 50,000 rows out of 175,341 (random_state=42); final winner refitted on full 175,341 rows.",
+  "final_refit_samples": 175341,
+  "models": {
+    "logistic_regression": {
+      "model_key": "logistic_regression",
+      "model_name": "Logistic Regression",
+      "best_params": {
+        "classifier__C": 10.0,
+        "classifier__class_weight": null,
+        "classifier__solver": "liblinear"
+      },
+      "primary_scoring": "f1",
+      "best_cv_score": 0.9548,
+      "best_cv_metrics": {
+        "recall": 0.9882,
+        "precision": 0.9236,
+        "f1": 0.9548,
+        "roc_auc": 0.9847,
+        "accuracy": 0.9363
+      },
+      "num_candidates": 12,
+      "tuning_duration_seconds": 111.861,
+      "full_refit_duration_seconds": 44.07,
+      "top_candidates": [
+        {
+          "rank": 1,
+          "params": {
+            "C": 10.0,
+            "class_weight": null,
+            "solver": "liblinear"
+          },
+          "mean_fit_time_s": 3.531,
+          "cv_recall": 0.9882,
+          "cv_precision": 0.9236,
+          "cv_f1": 0.9548,
+          "cv_roc_auc": 0.9847,
+          "cv_accuracy": 0.9363
+        },
+        {
+          "rank": 2,
+          "params": {
+            "C": 10.0,
+            "class_weight": null,
+            "solver": "lbfgs"
+          },
+          "mean_fit_time_s": 1.435,
+          "cv_recall": 0.9882,
+          "cv_precision": 0.9236,
+          "cv_f1": 0.9548,
+          "cv_roc_auc": 0.9847,
+          "cv_accuracy": 0.9363
+        },
+        {
+          "rank": 3,
+          "params": {
+            "C": 1.0,
+            "class_weight": null,
+            "solver": "liblinear"
+          },
+          "mean_fit_time_s": 2.046,
+          "cv_recall": 0.9888,
+          "cv_precision": 0.9217,
+          "cv_f1": 0.954,
+          "cv_roc_auc": 0.9842,
+          "cv_accuracy": 0.9352
+        },
+        {
+          "rank": 4,
+          "params": {
+            "C": 1.0,
+            "class_weight": null,
+            "solver": "lbfgs"
+          },
+          "mean_fit_time_s": 1.03,
+          "cv_recall": 0.9887,
+          "cv_precision": 0.9216,
+          "cv_f1": 0.954,
+          "cv_roc_auc": 0.9841,
+          "cv_accuracy": 0.935
+        },
+        {
+          "rank": 5,
+          "params": {
+            "C": 0.1,
+            "class_weight": null,
+            "solver": "liblinear"
+          },
+          "mean_fit_time_s": 1.23,
+          "cv_recall": 0.9902,
+          "cv_precision": 0.9184,
+          "cv_f1": 0.9529,
+          "cv_roc_auc": 0.9827,
+          "cv_accuracy": 0.9334
+        }
+      ],
+      "artifact_path": "D:\\Project\\NETGUARD-AI\\models\\binary\\logistic_regression.joblib"
+    },
+    "decision_tree": {
+      "model_key": "decision_tree",
+      "model_name": "Decision Tree Classifier",
+      "best_params": {
+        "classifier__criterion": "entropy",
+        "classifier__max_depth": null,
+        "classifier__min_samples_leaf": 1,
+        "classifier__min_samples_split": 2
+      },
+      "primary_scoring": "f1",
+      "best_cv_score": 0.9563,
+      "best_cv_metrics": {
+        "recall": 0.9562,
+        "precision": 0.9563,
+        "f1": 0.9563,
+        "roc_auc": 0.9322,
+        "accuracy": 0.9405
+      },
+      "num_candidates": 24,
+      "tuning_duration_seconds": 180.652,
+      "full_refit_duration_seconds": 15.763,
+      "top_candidates": [
+        {
+          "rank": 1,
+          "params": {
+            "criterion": "entropy",
+            "max_depth": null,
+            "min_samples_leaf": 1,
+            "min_samples_split": 2
+          },
+          "mean_fit_time_s": 1.905,
+          "cv_recall": 0.9562,
+          "cv_precision": 0.9563,
+          "cv_f1": 0.9563,
+          "cv_roc_auc": 0.9322,
+          "cv_accuracy": 0.9405
+        },
+        {
+          "rank": 2,
+          "params": {
+            "criterion": "gini",
+            "max_depth": null,
+            "min_samples_leaf": 1,
+            "min_samples_split": 2
+          },
+          "mean_fit_time_s": 1.916,
+          "cv_recall": 0.9528,
+          "cv_precision": 0.9542,
+          "cv_f1": 0.9535,
+          "cv_roc_auc": 0.9284,
+          "cv_accuracy": 0.9367
+        },
+        {
+          "rank": 3,
+          "params": {
+            "criterion": "entropy",
+            "max_depth": null,
+            "min_samples_leaf": 4,
+            "min_samples_split": 2
+          },
+          "mean_fit_time_s": 1.391,
+          "cv_recall": 0.9463,
+          "cv_precision": 0.9602,
+          "cv_f1": 0.9532,
+          "cv_roc_auc": 0.9532,
+          "cv_accuracy": 0.9367
+        },
+        {
+          "rank": 4,
+          "params": {
+            "criterion": "entropy",
+            "max_depth": null,
+            "min_samples_leaf": 1,
+            "min_samples_split": 10
+          },
+          "mean_fit_time_s": 1.667,
+          "cv_recall": 0.9461,
+          "cv_precision": 0.9603,
+          "cv_f1": 0.9532,
+          "cv_roc_auc": 0.9474,
+          "cv_accuracy": 0.9367
+        },
+        {
+          "rank": 5,
+          "params": {
+            "criterion": "entropy",
+            "max_depth": 20,
+            "min_samples_leaf": 1,
+            "min_samples_split": 2
+          },
+          "mean_fit_time_s": 1.623,
+          "cv_recall": 0.9413,
+          "cv_precision": 0.9654,
+          "cv_f1": 0.9531,
+          "cv_roc_auc": 0.9535,
+          "cv_accuracy": 0.937
+        }
+      ],
+      "artifact_path": "D:\\Project\\NETGUARD-AI\\models\\binary\\decision_tree.joblib"
+    },
+    "random_forest": {
+      "model_key": "random_forest",
+      "model_name": "Random Forest Classifier",
+      "best_params": {
+        "classifier__max_depth": 25,
+        "classifier__min_samples_leaf": 1,
+        "classifier__min_samples_split": 2,
+        "classifier__n_estimators": 100
+      },
+      "primary_scoring": "f1",
+      "best_cv_score": 0.9632,
+      "best_cv_metrics": {
+        "recall": 0.9573,
+        "precision": 0.9693,
+        "f1": 0.9632,
+        "roc_auc": 0.9921,
+        "accuracy": 0.9503
+      },
+      "num_candidates": 16,
+      "tuning_duration_seconds": 370.41,
+      "full_refit_duration_seconds": 102.436,
+      "top_candidates": [
+        {
+          "rank": 1,
+          "params": {
+            "max_depth": 25,
+            "min_samples_leaf": 1,
+            "min_samples_split": 2,
+            "n_estimators": 100
+          },
+          "mean_fit_time_s": 7.828,
+          "cv_recall": 0.9573,
+          "cv_precision": 0.9693,
+          "cv_f1": 0.9632,
+          "cv_roc_auc": 0.9921,
+          "cv_accuracy": 0.9503
+        },
+        {
+          "rank": 2,
+          "params": {
+            "max_depth": 25,
+            "min_samples_leaf": 1,
+            "min_samples_split": 2,
+            "n_estimators": 50
+          },
+          "mean_fit_time_s": 3.961,
+          "cv_recall": 0.9569,
+          "cv_precision": 0.9692,
+          "cv_f1": 0.963,
+          "cv_roc_auc": 0.9918,
+          "cv_accuracy": 0.95
+        },
+        {
+          "rank": 3,
+          "params": {
+            "max_depth": 25,
+            "min_samples_leaf": 1,
+            "min_samples_split": 10,
+            "n_estimators": 50
+          },
+          "mean_fit_time_s": 3.826,
+          "cv_recall": 0.9537,
+          "cv_precision": 0.9716,
+          "cv_f1": 0.9626,
+          "cv_roc_auc": 0.9921,
+          "cv_accuracy": 0.9495
+        },
+        {
+          "rank": 4,
+          "params": {
+            "max_depth": 25,
+            "min_samples_leaf": 1,
+            "min_samples_split": 10,
+            "n_estimators": 100
+          },
+          "mean_fit_time_s": 6.349,
+          "cv_recall": 0.954,
+          "cv_precision": 0.9712,
+          "cv_f1": 0.9625,
+          "cv_roc_auc": 0.9923,
+          "cv_accuracy": 0.9494
+        },
+        {
+          "rank": 5,
+          "params": {
+            "max_depth": 25,
+            "min_samples_leaf": 4,
+            "min_samples_split": 2,
+            "n_estimators": 50
+          },
+          "mean_fit_time_s": 2.95,
+          "cv_recall": 0.9521,
+          "cv_precision": 0.971,
+          "cv_f1": 0.9615,
+          "cv_roc_auc": 0.9919,
+          "cv_accuracy": 0.9481
+        }
+      ],
+      "artifact_path": "D:\\Project\\NETGUARD-AI\\models\\binary\\random_forest.joblib"
+    }
+  }
+}

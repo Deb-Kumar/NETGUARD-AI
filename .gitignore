@@ -1,0 +1,56 @@
+# Virtual environments & Python cache
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.Python
+build/
+dist/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets & environment config
+.env
+.env.*
+.streamlit/secrets.toml
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Raw UNSW-NB15 datasets & PDFs in root (never commit large raw datasets)
+/Training and Testing Sets/
+/UNSW-NB15_*.csv
+/NUSW-NB15_*.csv
+/ReadMe.pdf
+/The UNSW-NB15 description.pdf
+
+# Organized dataset directories (preserve directory placeholders only)
+dataset/raw/*
+!dataset/raw/.gitkeep
+dataset/processed/*
+!dataset/processed/.gitkeep
+
+# Serialized models & local SQLite databases
+models/binary/*
+!models/binary/.gitkeep
+models/multiclass/*
+!models/multiclass/.gitkeep
+database/*.db
+database/*.db-*
+database/*.sqlite*
+
+# Generated large reports/figures (preserve structure)
+reports/figures/*
+!reports/figures/.gitkeep

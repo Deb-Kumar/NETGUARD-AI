@@ -1,0 +1,154 @@
+{
+  "excluded_columns": [
+    "id",
+    "attack_cat",
+    "label"
+  ],
+  "base_feature_columns": [
+    "dur",
+    "proto",
+    "service",
+    "state",
+    "spkts",
+    "dpkts",
+    "sbytes",
+    "dbytes",
+    "rate",
+    "sttl",
+    "dttl",
+    "sload",
+    "dload",
+    "sloss",
+    "dloss",
+    "sinpkt",
+    "dinpkt",
+    "sjit",
+    "djit",
+    "swin",
+    "stcpb",
+    "dtcpb",
+    "dwin",
+    "tcprtt",
+    "synack",
+    "ackdat",
+    "smean",
+    "dmean",
+    "trans_depth",
+    "response_body_len",
+    "ct_srv_src",
+    "ct_state_ttl",
+    "ct_dst_ltm",
+    "ct_src_dport_ltm",
+    "ct_dst_sport_ltm",
+    "ct_dst_src_ltm",
+    "is_ftp_login",
+    "ct_ftp_cmd",
+    "ct_flw_http_mthd",
+    "ct_src_ltm",
+    "ct_srv_dst",
+    "is_sm_ips_ports"
+  ],
+  "feature_engineering_enabled": true,
+  "engineered_features": [
+    "total_bytes",
+    "total_pkts",
+    "byte_ratio",
+    "pkt_ratio",
+    "avg_bytes_per_pkt",
+    "ttl_diff",
+    "loss_total",
+    "is_service_unspecified"
+  ],
+  "numerical_columns": [
+    "dur",
+    "spkts",
+    "dpkts",
+    "sbytes",
+    "dbytes",
+    "rate",
+    "sttl",
+    "dttl",
+    "sload",
+    "dload",
+    "sloss",
+    "dloss",
+    "sinpkt",
+    "dinpkt",
+    "sjit",
+    "djit",
+    "swin",
+    "stcpb",
+    "dtcpb",
+    "dwin",
+    "tcprtt",
+    "synack",
+    "ackdat",
+    "smean",
+    "dmean",
+    "trans_depth",
+    "response_body_len",
+    "ct_srv_src",
+    "ct_state_ttl",
+    "ct_dst_ltm",
+    "ct_src_dport_ltm",
+    "ct_dst_sport_ltm",
+    "ct_dst_src_ltm",
+    "is_ftp_login",
+    "ct_ftp_cmd",
+    "ct_flw_http_mthd",
+    "ct_src_ltm",
+    "ct_srv_dst",
+    "is_sm_ips_ports",
+    "total_bytes",
+    "byte_ratio",
+    "total_pkts",
+    "pkt_ratio",
+    "avg_bytes_per_pkt",
+    "ttl_diff",
+    "loss_total",
+    "is_service_unspecified"
+  ],
+  "categorical_columns": [
+    "proto",
+    "service",
+    "state"
+  ],
+  "pipelines": {
+    "linear": {
+      "numerical": [
+        "SimpleImputer(strategy='median')",
+        "StandardScaler()"
+      ],
+      "categorical": [
+        "SimpleImputer(strategy='most_frequent')",
+        "OneHotEncoder(handle_unknown='ignore', sparse_output=True)"
+      ]
+    },
+    "tree": {
+      "numerical": [
+        "SimpleImputer(strategy='median')"
+      ],
+      "categorical": [
+        "SimpleImputer(strategy='most_frequent')",
+        "OneHotEncoder(handle_unknown='ignore', sparse_output=True)"
+      ]
+    }
+  },
+  "class_imbalance_analysis": {
+    "total_samples": 175341,
+    "class_counts": {
+      "0": 56000,
+      "1": 119341
+    },
+    "class_percentages": {
+      "0": 31.94,
+      "1": 68.06
+    },
+    "imbalance_ratio_max_to_min": 2.131,
+    "balanced_class_weights": {
+      "0": 1.5655,
+      "1": 0.7346
+    },
+    "smote_policy": "SMOTE is intentionally not auto-applied before splitting or on the full 175k one-hot encoded matrix due to synthetic flow artifact risks and memory cost; class_weight='balanced' is evaluated natively inside models."
+  }
+}

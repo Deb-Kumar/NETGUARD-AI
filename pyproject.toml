@@ -1,0 +1,11 @@
+[project]
+name = "netguard-ai"
+version = "0.2.0"
+description = "AI-Powered Network Intrusion Detection and Threat Classification System Using Machine Learning"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v"

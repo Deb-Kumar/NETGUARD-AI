@@ -1,0 +1,61 @@
+"""Dataset loading, profiling, and validation modules for NETGUARD AI."""
+
+from src.data.eda import (
+    compute_categorical_summary,
+    compute_correlation_analysis,
+    compute_duplicate_conflict_analysis,
+    compute_numerical_summary,
+    compute_outlier_summary,
+    run_eda_pipeline,
+)
+from src.data.loader import (
+    DatasetLoadError,
+    RAW_49_COLUMNS,
+    get_feature_metadata_map,
+    iter_csv_chunks,
+    load_csv_dataset,
+    load_feature_descriptions,
+    load_raw_part,
+    load_training_and_testing_sets,
+    profile_dataset,
+)
+from src.data.validator import (
+    DataLeakageError,
+    PREDEFINED_CATEGORICAL_COLUMNS,
+    PREDEFINED_COLUMNS,
+    PREDEFINED_FEATURE_COLUMNS,
+    PREDEFINED_NUMERICAL_COLUMNS,
+    ValidationResult,
+    extract_features_and_target,
+    validate_no_target_leakage,
+    validate_predefined_dataset,
+    validate_train_test_compatibility,
+)
+
+__all__ = [
+    "DataLeakageError",
+    "DatasetLoadError",
+    "PREDEFINED_CATEGORICAL_COLUMNS",
+    "PREDEFINED_COLUMNS",
+    "PREDEFINED_FEATURE_COLUMNS",
+    "PREDEFINED_NUMERICAL_COLUMNS",
+    "RAW_49_COLUMNS",
+    "ValidationResult",
+    "compute_categorical_summary",
+    "compute_correlation_analysis",
+    "compute_duplicate_conflict_analysis",
+    "compute_numerical_summary",
+    "compute_outlier_summary",
+    "extract_features_and_target",
+    "get_feature_metadata_map",
+    "iter_csv_chunks",
+    "load_csv_dataset",
+    "load_feature_descriptions",
+    "load_raw_part",
+    "load_training_and_testing_sets",
+    "profile_dataset",
+    "run_eda_pipeline",
+    "validate_no_target_leakage",
+    "validate_predefined_dataset",
+    "validate_train_test_compatibility",
+]

@@ -1,0 +1,231 @@
+{
+  "n_splits": 5,
+  "random_state": 42,
+  "dataset_scope": "Full training dataset (175,341 rows).",
+  "models": {
+    "logistic_regression": {
+      "model_key": "logistic_regression",
+      "model_name": "Logistic Regression",
+      "duration_seconds": 25.27,
+      "metrics": {
+        "accuracy": {
+          "fold_scores": [
+            0.9315,
+            0.9312,
+            0.9353,
+            0.9334,
+            0.9308
+          ],
+          "mean": 0.9324,
+          "std": 0.0019
+        },
+        "precision": {
+          "fold_scores": [
+            0.9487,
+            0.9485,
+            0.9503,
+            0.9499,
+            0.9502
+          ],
+          "mean": 0.9495,
+          "std": 0.0009
+        },
+        "recall": {
+          "fold_scores": [
+            0.9508,
+            0.9505,
+            0.9548,
+            0.9524,
+            0.948
+          ],
+          "mean": 0.9513,
+          "std": 0.0025
+        },
+        "f1": {
+          "fold_scores": [
+            0.9497,
+            0.9495,
+            0.9526,
+            0.9512,
+            0.9491
+          ],
+          "mean": 0.9504,
+          "std": 0.0014
+        },
+        "roc_auc": {
+          "fold_scores": [
+            0.9836,
+            0.9841,
+            0.9851,
+            0.9849,
+            0.9842
+          ],
+          "mean": 0.9844,
+          "std": 0.0006
+        }
+      }
+    },
+    "decision_tree": {
+      "model_key": "decision_tree",
+      "model_name": "Decision Tree Classifier",
+      "duration_seconds": 37.947,
+      "metrics": {
+        "accuracy": {
+          "fold_scores": [
+            0.9447,
+            0.9436,
+            0.9456,
+            0.9462,
+            0.9455
+          ],
+          "mean": 0.9451,
+          "std": 0.001
+        },
+        "precision": {
+          "fold_scores": [
+            0.9777,
+            0.9777,
+            0.9792,
+            0.9783,
+            0.9741
+          ],
+          "mean": 0.9774,
+          "std": 0.002
+        },
+        "recall": {
+          "fold_scores": [
+            0.9402,
+            0.9386,
+            0.94,
+            0.9419,
+            0.9452
+          ],
+          "mean": 0.9412,
+          "std": 0.0025
+        },
+        "f1": {
+          "fold_scores": [
+            0.9585,
+            0.9577,
+            0.9592,
+            0.9598,
+            0.9594
+          ],
+          "mean": 0.9589,
+          "std": 0.0008
+        },
+        "roc_auc": {
+          "fold_scores": [
+            0.9747,
+            0.9737,
+            0.9752,
+            0.9741,
+            0.9714
+          ],
+          "mean": 0.9738,
+          "std": 0.0014
+        }
+      }
+    },
+    "random_forest": {
+      "model_key": "random_forest",
+      "model_name": "Random Forest Classifier",
+      "duration_seconds": 192.566,
+      "metrics": {
+        "accuracy": {
+          "fold_scores": [
+            0.9519,
+            0.9532,
+            0.955,
+            0.9551,
+            0.9524
+          ],
+          "mean": 0.9535,
+          "std": 0.0015
+        },
+        "precision": {
+          "fold_scores": [
+            0.9768,
+            0.9773,
+            0.9789,
+            0.9796,
+            0.9779
+          ],
+          "mean": 0.9781,
+          "std": 0.0012
+        },
+        "recall": {
+          "fold_scores": [
+            0.952,
+            0.9535,
+            0.9545,
+            0.954,
+            0.9516
+          ],
+          "mean": 0.9531,
+          "std": 0.0012
+        },
+        "f1": {
+          "fold_scores": [
+            0.9642,
+            0.9652,
+            0.9665,
+            0.9666,
+            0.9646
+          ],
+          "mean": 0.9654,
+          "std": 0.0011
+        },
+        "roc_auc": {
+          "fold_scores": [
+            0.9935,
+            0.9936,
+            0.994,
+            0.9942,
+            0.9935
+          ],
+          "mean": 0.9938,
+          "std": 0.0003
+        }
+      }
+    }
+  },
+  "comparison_table": [
+    {
+      "Model Key": "logistic_regression",
+      "Model Name": "Logistic Regression",
+      "CV Recall Mean": 0.9513,
+      "CV Recall Std": 0.0025,
+      "CV Precision Mean": 0.9495,
+      "CV F1 Mean": 0.9504,
+      "CV F1 Std": 0.0014,
+      "CV Accuracy Mean": 0.9324,
+      "CV ROC-AUC Mean": 0.9844,
+      "Duration (s)": 25.27
+    },
+    {
+      "Model Key": "decision_tree",
+      "Model Name": "Decision Tree Classifier",
+      "CV Recall Mean": 0.9412,
+      "CV Recall Std": 0.0025,
+      "CV Precision Mean": 0.9774,
+      "CV F1 Mean": 0.9589,
+      "CV F1 Std": 0.0008,
+      "CV Accuracy Mean": 0.9451,
+      "CV ROC-AUC Mean": 0.9738,
+      "Duration (s)": 37.947
+    },
+    {
+      "Model Key": "random_forest",
+      "Model Name": "Random Forest Classifier",
+      "CV Recall Mean": 0.9531,
+      "CV Recall Std": 0.0012,
+      "CV Precision Mean": 0.9781,
+      "CV F1 Mean": 0.9654,
+      "CV F1 Std": 0.0011,
+      "CV Accuracy Mean": 0.9535,
+      "CV ROC-AUC Mean": 0.9938,
+      "Duration (s)": 192.566
+    }
+  ]
+}
