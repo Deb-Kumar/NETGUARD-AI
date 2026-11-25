@@ -5,13 +5,12 @@ from __future__ import annotations
 import json
 import time
 from collections.abc import Sequence
-from pathlib import Path
 from typing import Any
 
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 
-from src.data.loader import load_training_and_testing_sets
+from src.data.loader import load_training_and_testing_sets, stratified_sample_xy
 from src.data.validator import extract_features_and_target
 from src.models import (
     MODEL_BUILDERS,
@@ -19,7 +18,6 @@ from src.models import (
     PARAM_GRID_BUILDERS,
     save_model_artifact,
 )
-from src.training.cross_validation import _stratified_subsample
 from src.utils.config import (
     CV_FOLDS,
     ProjectPaths,
@@ -77,17 +75,19 @@ def run_grid_search_tuning(
 
     X_train, y_train = extract_features_and_target(train_df, task="binary")
 
-    if max_tuning_samples is not None and len(X_train) > max_tuning_samples:
-        X_search, y_search = _stratified_subsample(
-            X_train, y_train, max_samples=max_tuning_samples
-        )
-        search_scope = (
-            f"Stratified training subset of {len(X_search):,} rows out of {len(X_train):,} "
-            f"(random_state={RANDOM_STATE}); final winner refitted on full {len(X_train):,} rows."
+    if max_tuning_samples is not None:
+        X_search, y_search, is_sampled = stratified_sample_xy(
+            X_train, y_train, max_samples=max_tuning_samples, random_state=RANDOM_STATE
         )
     else:
-        X_search, y_search = X_train, y_train
-        search_scope = f"Full training dataset ({len(X_search):,} rows)."
+        X_search, y_search, is_sampled = X_train, y_train, False
+
+    search_scope = (
+        f"Stratified training subset of {len(X_search):,} rows out of {len(X_train):,} "
+        f"(random_state={RANDOM_STATE}); final winner refitted on full {len(X_train):,} rows."
+        if is_sampled
+        else f"Full training dataset ({len(X_search):,} rows)."
+    )
 
     skf = StratifiedKFold(n_splits=cv_folds, shuffle=True, random_state=RANDOM_STATE)
     multi_scoring = {

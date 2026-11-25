@@ -14,7 +14,11 @@ import seaborn as sns
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-from src.data.loader import load_training_and_testing_sets, profile_dataset
+from src.data.loader import (
+    load_training_and_testing_sets,
+    profile_dataset,
+    stratified_sample_df,
+)
 from src.data.validator import (
     PREDEFINED_CATEGORICAL_COLUMNS,
     PREDEFINED_FEATURE_COLUMNS,
@@ -65,27 +69,6 @@ def _configure_plot_style() -> None:
             "savefig.bbox": "tight",
         }
     )
-
-
-def _stratified_sample(
-    df: pd.DataFrame,
-    *,
-    sample_size: int,
-    stratify_col: str = BINARY_TARGET_COLUMN,
-    random_state: int = RANDOM_STATE,
-) -> tuple[pd.DataFrame, bool]:
-    """Return a reproducible stratified sample when df exceeds sample_size."""
-    if len(df) <= sample_size:
-        return df.copy(), False
-    frac = sample_size / len(df)
-    parts = [
-        grp.sample(
-            n=min(len(grp), max(1, int(round(len(grp) * frac)))),
-            random_state=random_state,
-        )
-        for _, grp in df.groupby(stratify_col, sort=False)
-    ]
-    return pd.concat(parts, ignore_index=True), True
 
 
 def compute_numerical_summary(df: pd.DataFrame) -> dict[str, dict[str, float]]:
@@ -332,7 +315,9 @@ def _plot_numerical_distributions(
     sample_size: int = 30_000,
 ) -> bool:
     """Plot log1p histograms for key skewed numerical flow features."""
-    sampled, is_sampled = _stratified_sample(train_df, sample_size=sample_size)
+    sampled, is_sampled = stratified_sample_df(
+        train_df, max_samples=sample_size, stratify_col=BINARY_TARGET_COLUMN, random_state=RANDOM_STATE
+    )
     features = [c for c in KEY_DISTRIBUTION_FEATURES if c in sampled.columns]
     fig, axes = plt.subplots(2, 3, figsize=(15, 9))
     axes_flat = axes.flatten()
@@ -367,7 +352,9 @@ def _plot_outlier_boxplots(
     sample_size: int = 20_000,
 ) -> bool:
     """Plot class-wise box plots (on log1p scale for skewed features) to inspect outliers."""
-    sampled, is_sampled = _stratified_sample(train_df, sample_size=sample_size)
+    sampled, is_sampled = stratified_sample_df(
+        train_df, max_samples=sample_size, stratify_col=BINARY_TARGET_COLUMN, random_state=RANDOM_STATE
+    )
     features = [c for c in KEY_DISTRIBUTION_FEATURES if c in sampled.columns]
     fig, axes = plt.subplots(2, 3, figsize=(15, 9))
     axes_flat = axes.flatten()

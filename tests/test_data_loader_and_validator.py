@@ -173,7 +173,7 @@ def test_validator_supports_prediction_only_dataframe() -> None:
     assert res.is_valid is True
 
 
-def test_cli_inspect_data_saves_report_and_passes(tmp_path: Path, monkeypatch, capsys) -> None:
+def test_cli_inspect_data_saves_report_and_passes(monkeypatch, capsys) -> None:
     monkeypatch.setenv("NETGUARD_PROJECT_ROOT", str(get_paths().root))
     exit_code = cli_main(["inspect-data", "--downcast", "--save-report"])
     assert exit_code == 0

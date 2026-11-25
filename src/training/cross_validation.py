@@ -5,14 +5,13 @@ from __future__ import annotations
 import json
 import time
 from collections.abc import Sequence
-from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold, cross_validate
 
-from src.data.loader import load_training_and_testing_sets
+from src.data.loader import load_training_and_testing_sets, stratified_sample_xy
 from src.data.validator import extract_features_and_target
 from src.models import MODEL_BUILDERS, MODEL_SPECS
 from src.utils.config import (
@@ -22,32 +21,6 @@ from src.utils.config import (
     ensure_directories,
     get_paths,
 )
-
-
-def _stratified_subsample(
-    X: pd.DataFrame,
-    y: pd.Series,
-    *,
-    max_samples: int,
-    random_state: int = RANDOM_STATE,
-) -> tuple[pd.DataFrame, pd.Series]:
-    """Take a reproducible stratified subsample strictly from training data."""
-    if len(X) <= max_samples:
-        return X, y
-    combined = X.copy()
-    combined["_target"] = y.to_numpy()
-    frac = max_samples / len(combined)
-    sampled = pd.concat(
-        [
-            grp.sample(
-                n=min(len(grp), max(1, int(round(len(grp) * frac)))),
-                random_state=random_state,
-            )
-            for _, grp in combined.groupby("_target", sort=False)
-        ],
-        ignore_index=True,
-    )
-    return sampled.drop(columns=["_target"]), sampled["_target"]
 
 
 def run_stratified_cv(
@@ -68,15 +41,19 @@ def run_stratified_cv(
 
     X_train, y_train = extract_features_and_target(train_df, task="binary")
 
-    if max_samples is not None and len(X_train) > max_samples:
-        X_cv, y_cv = _stratified_subsample(X_train, y_train, max_samples=max_samples)
-        sampling_note = (
-            f"Stratified training subsample of {len(X_cv):,} rows out of {len(X_train):,} "
-            f"(random_state={RANDOM_STATE})."
+    if max_samples is not None:
+        X_cv, y_cv, is_sampled = stratified_sample_xy(
+            X_train, y_train, max_samples=max_samples, random_state=RANDOM_STATE
         )
     else:
-        X_cv, y_cv = X_train, y_train
-        sampling_note = f"Full training dataset ({len(X_cv):,} rows)."
+        X_cv, y_cv, is_sampled = X_train, y_train, False
+
+    sampling_note = (
+        f"Stratified training subsample of {len(X_cv):,} rows out of {len(X_train):,} "
+        f"(random_state={RANDOM_STATE})."
+        if is_sampled
+        else f"Full training dataset ({len(X_cv):,} rows)."
+    )
 
     skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=RANDOM_STATE)
     scoring = {

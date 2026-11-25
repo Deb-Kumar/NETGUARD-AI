@@ -6,7 +6,6 @@ from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import Any
 
-import numpy as np
 import pandas as pd
 
 from src.utils.config import (
@@ -14,6 +13,7 @@ from src.utils.config import (
     ID_COLUMN,
     MULTICLASS_TARGET_COLUMN,
     ProjectPaths,
+    RANDOM_STATE,
     get_paths,
 )
 
@@ -423,3 +423,46 @@ def profile_dataset(
         },
         "target_distribution": target_distribution,
     }
+
+
+def stratified_sample_df(
+    df: pd.DataFrame,
+    *,
+    max_samples: int,
+    stratify_col: str = BINARY_TARGET_COLUMN,
+    random_state: int = RANDOM_STATE,
+) -> tuple[pd.DataFrame, bool]:
+    """Return a reproducible stratified DataFrame sample when rows exceed max_samples."""
+    if len(df) <= max_samples:
+        return df.copy(), False
+    frac = max_samples / len(df)
+    parts = [
+        grp.sample(
+            n=min(len(grp), max(1, int(round(len(grp) * frac)))),
+            random_state=random_state,
+        )
+        for _, grp in df.groupby(stratify_col, sort=False)
+    ]
+    return pd.concat(parts, ignore_index=True), True
+
+
+def stratified_sample_xy(
+    X: pd.DataFrame,
+    y: pd.Series,
+    *,
+    max_samples: int,
+    random_state: int = RANDOM_STATE,
+) -> tuple[pd.DataFrame, pd.Series, bool]:
+    """Return a reproducible stratified subsample of (X, y) when rows exceed max_samples."""
+    if len(X) <= max_samples:
+        return X, y, False
+    combined = X.copy()
+    target_col = "__strat_target__"
+    combined[target_col] = y.to_numpy()
+    sampled_df, _ = stratified_sample_df(
+        combined,
+        max_samples=max_samples,
+        stratify_col=target_col,
+        random_state=random_state,
+    )
+    return sampled_df.drop(columns=[target_col]), sampled_df[target_col], True

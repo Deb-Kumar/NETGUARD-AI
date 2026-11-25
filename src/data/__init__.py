@@ -18,6 +18,8 @@ from src.data.loader import (
     load_raw_part,
     load_training_and_testing_sets,
     profile_dataset,
+    stratified_sample_df,
+    stratified_sample_xy,
 )
 from src.data.validator import (
     DataLeakageError,
@@ -55,6 +57,8 @@ __all__ = [
     "load_training_and_testing_sets",
     "profile_dataset",
     "run_eda_pipeline",
+    "stratified_sample_df",
+    "stratified_sample_xy",
     "validate_no_target_leakage",
     "validate_predefined_dataset",
     "validate_train_test_compatibility",

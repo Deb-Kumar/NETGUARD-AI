@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from streamlit.testing.v1 import AppTest
 
-from src.database import clear_history, query_history
+from src.database import query_history
 from src.utils.config import get_paths
 
 
-def test_interactive_e2e_single_prediction_history_and_settings(tmp_path: Path, monkeypatch) -> None:
+def test_interactive_e2e_single_prediction_history_and_settings() -> None:
     """Simulate user submitting Single Prediction, verifying SQLite History, and clearing it."""
     real_root = get_paths().root
     # Isolate DB writes via temporary root? No — Single Prediction needs real trained models,

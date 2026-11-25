@@ -17,7 +17,6 @@ from src.data.loader import get_feature_metadata_map
 from src.data.validator import (
     PREDEFINED_CATEGORICAL_COLUMNS,
     PREDEFINED_FEATURE_COLUMNS,
-    PREDEFINED_NUMERICAL_COLUMNS,
 )
 from src.evaluation.evaluate import evaluate_binary_model
 from src.models import MODEL_SPECS, load_model_artifact

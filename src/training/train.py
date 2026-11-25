@@ -6,14 +6,13 @@ import json
 import time
 from collections.abc import Sequence
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold, cross_validate
 from sklearn.pipeline import Pipeline
 
-from src.data.loader import load_training_and_testing_sets
+from src.data.loader import load_training_and_testing_sets, stratified_sample_xy
 from src.data.validator import extract_features_and_target
 from src.models import MODEL_BUILDERS, MODEL_SPECS, save_model_artifact
 from src.preprocessing import (
@@ -94,24 +93,14 @@ def evaluate_class_weight_effect(
     max_samples: int = 40_000,
 ) -> dict[str, Any]:
     """Compare class_weight=None vs 'balanced' using Stratified CV on training data."""
-    if len(X_train) > max_samples:
-        # Stratified subsample on training data only for lightweight effect check
-        combined = X_train.copy()
-        combined["_target"] = y_train.to_numpy()
-        frac = max_samples / len(combined)
-        sampled = pd.concat(
-            [
-                grp.sample(n=max(1, int(round(len(grp) * frac))), random_state=RANDOM_STATE)
-                for _, grp in combined.groupby("_target", sort=False)
-            ],
-            ignore_index=True,
-        )
-        X_sub = sampled.drop(columns=["_target"])
-        y_sub = sampled["_target"]
-        sampled_note = f"Stratified training subsample ({len(X_sub):,} rows)"
-    else:
-        X_sub, y_sub = X_train, y_train
-        sampled_note = f"Full training set ({len(X_sub):,} rows)"
+    X_sub, y_sub, is_sampled = stratified_sample_xy(
+        X_train, y_train, max_samples=max_samples, random_state=RANDOM_STATE
+    )
+    sampled_note = (
+        f"Stratified training subsample ({len(X_sub):,} rows)"
+        if is_sampled
+        else f"Full training set ({len(X_sub):,} rows)"
+    )
 
     skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=RANDOM_STATE)
     comparison: dict[str, dict[str, dict[str, float]]] = {}

@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
+import pandas as pd
 import streamlit as st
 
 from app.components.data_access import get_artifact_status, list_saved_figures, load_json_artifact
@@ -131,8 +130,6 @@ def render_reports_exports() -> None:
 
     eval_data = load_json_artifact("models/metadata/binary_evaluation_results.json")
     if eval_data and eval_data.get("comparison_table"):
-        import pandas as pd
-
         comp_csv = pd.DataFrame(eval_data["comparison_table"]).to_csv(index=False).encode("utf-8")
         st.download_button(
             "Download Model Comparison Table (CSV)",
@@ -221,8 +218,6 @@ def render_settings() -> None:
     st.subheader("Artifact Health Status")
     status = get_artifact_status()
     rows = [{"Component": k, "Ready": "Yes" if v else "No"} for k, v in status.items()]
-    import pandas as pd
-
     st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     if st.button("Clear Streamlit Data Cache"):

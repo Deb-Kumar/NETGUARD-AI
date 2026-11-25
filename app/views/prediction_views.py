@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import pandas as pd
 import streamlit as st
 
 from app.components.charts import plotly_binary_donut
@@ -23,7 +22,7 @@ from src.prediction import (
     predict_batch_csv,
     predict_single_record,
 )
-from src.utils.config import MAX_UPLOAD_SIZE_MB
+from src.utils.config import MAX_UPLOAD_SIZE_MB, get_paths
 
 INTEGER_FEATURE_HINT: set[str] = {
     "spkts",
@@ -82,8 +81,6 @@ def render_single_prediction() -> None:
             "python main.py train\npython main.py cross-validate\npython main.py select-best",
         )
         return
-
-    from src.utils.config import get_paths
 
     paths = get_paths()
     active_model_key = st.session_state.get("active_binary_model_key", "best_model")
