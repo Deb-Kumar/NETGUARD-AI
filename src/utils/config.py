@@ -16,6 +16,25 @@ PROJECT_TITLE: str = (
 APP_VERSION: str = "0.2.0"
 
 
+def load_local_dotenv(env_file: Path | None = None) -> None:
+    """Load key=value overrides from .env via os.environ.setdefault if present."""
+    target = env_file or (Path(__file__).resolve().parents[2] / ".env")
+    if not target.is_file():
+        return
+    for raw_line in target.read_text(encoding="utf-8", errors="ignore").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, val = line.split("=", 1)
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        if key and val:
+            os.environ.setdefault(key, val)
+
+
+load_local_dotenv()
+
+
 def _int_env(var_name: str, default: int, *, min_val: int = 1, max_val: int = 1024) -> int:
     """Safely parse a bounded integer environment override."""
     raw = os.getenv(var_name)

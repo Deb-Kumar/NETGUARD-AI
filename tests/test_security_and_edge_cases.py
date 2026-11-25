@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import io
 import json
 import tempfile
 from pathlib import Path
@@ -156,3 +157,9 @@ def test_real_trained_model_persistence_and_end_to_end_consistency(tmp_path: Pat
     batch_res = predict_batch_csv(sample_csv, paths=paths)
     assert np.array_equal(direct_preds, batch_res.predictions_df["predicted_label"].to_numpy())
     assert batch_res.has_ground_truth is True
+
+    # Non-zero stream cursor position must still read cleanly
+    stream = io.StringIO(sample_csv.read_text(encoding="utf-8"))
+    stream.seek(50)
+    stream_res = predict_batch_csv(stream, filename="stream_test.csv", paths=paths)
+    assert stream_res.total_records == 10

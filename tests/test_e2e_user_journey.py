@@ -100,3 +100,20 @@ render_settings()
     save_btn.click().run()
     assert not at.exception
     assert at.session_state["active_binary_model_key"] == "random_forest"
+
+    # Verify Batch Prediction respects session model preference
+    batch_script = f"""
+import sys
+root = {root_repr}
+if root not in sys.path:
+    sys.path.insert(0, root)
+import streamlit as st
+from app.styles.theme import apply_cyber_theme
+from app.pages.batch_prediction import render_batch_prediction
+st.session_state["active_binary_model_key"] = "random_forest"
+apply_cyber_theme()
+render_batch_prediction()
+"""
+    at_batch = AppTest.from_string(batch_script, default_timeout=30).run()
+    assert not at_batch.exception
+    assert at_batch.selectbox[0].value == "random_forest"

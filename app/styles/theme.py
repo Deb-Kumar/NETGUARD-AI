@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 
 COLOR_BG = "#0A1120"
@@ -117,11 +119,13 @@ def apply_cyber_theme() -> None:
 
 def render_page_header(title: str, subtitle: str) -> None:
     """Render standardized dark-navy page title banner."""
+    safe_title = html.escape(str(title), quote=True)
+    safe_subtitle = html.escape(str(subtitle), quote=True)
     st.markdown(
         f"""
         <div class="ng-header">
-            <h1>{title}</h1>
-            <p>{subtitle}</p>
+            <h1>{safe_title}</h1>
+            <p>{safe_subtitle}</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -130,11 +134,14 @@ def render_page_header(title: str, subtitle: str) -> None:
 
 def render_kpi_card(label: str, value: str, accent_hex: str = COLOR_BLUE) -> None:
     """Render a compact dark KPI metric card."""
+    safe_label = html.escape(str(label), quote=True)
+    safe_value = html.escape(str(value), quote=True)
+    safe_accent = html.escape(str(accent_hex), quote=True)
     st.markdown(
         f"""
-        <div class="ng-card" style="border-top: 3px solid {accent_hex};">
-            <div class="ng-kpi-label">{label}</div>
-            <div class="ng-kpi-value">{value}</div>
+        <div class="ng-card" style="border-top: 3px solid {safe_accent};">
+            <div class="ng-kpi-label">{safe_label}</div>
+            <div class="ng-kpi-value">{safe_value}</div>
         </div>
         """,
         unsafe_allow_html=True,

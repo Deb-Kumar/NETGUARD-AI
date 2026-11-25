@@ -367,15 +367,19 @@ def _plot_outlier_boxplots(
     for idx, col in enumerate(features):
         ax = axes_flat[idx]
         plot_df[f"log1p_{col}"] = np.log1p(np.clip(plot_df[col].astype(float), 0, None))
-        sns.boxplot(
-            data=plot_df,
-            x="Traffic Class",
-            y=f"log1p_{col}",
-            hue="Traffic Class",
-            palette={"Normal (0)": COLOR_NORMAL, "Malicious (1)": COLOR_MALICIOUS},
-            legend=False,
-            ax=ax,
+        vals_norm = plot_df.loc[plot_df["Traffic Class"] == "Normal (0)", f"log1p_{col}"].dropna().to_numpy()
+        vals_mal = plot_df.loc[plot_df["Traffic Class"] == "Malicious (1)", f"log1p_{col}"].dropna().to_numpy()
+        bp = ax.boxplot(
+            [vals_norm, vals_mal],
+            tick_labels=["Normal (0)", "Malicious (1)"],
+            patch_artist=True,
+            orientation="vertical",
+            medianprops={"color": "#0F172A", "linewidth": 1.4},
+            flierprops={"marker": "o", "markersize": 2.5, "alpha": 0.45},
         )
+        for patch, color in zip(bp["boxes"], (COLOR_NORMAL, COLOR_MALICIOUS)):
+            patch.set_facecolor(color)
+            patch.set_alpha(0.85)
         ax.set_title(f"Outlier Spread: log1p({col})")
         ax.set_xlabel("")
         ax.set_ylabel(f"log1p({col})")

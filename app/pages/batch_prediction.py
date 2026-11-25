@@ -10,7 +10,7 @@ from app.styles.theme import render_page_header, render_setup_message
 from src.database import log_prediction, sanitize_dataframe_for_csv
 from src.models import MODEL_SPECS
 from src.prediction import PredictionValidationError, predict_batch_csv
-from src.utils.config import MAX_UPLOAD_SIZE_MB
+from src.utils.config import MAX_UPLOAD_SIZE_MB, get_paths
 
 
 def render_batch_prediction() -> None:
@@ -28,10 +28,15 @@ def render_batch_prediction() -> None:
         )
         return
 
-    model_options = ["best_model"] + list(MODEL_SPECS.keys())
+    paths = get_paths()
+    active_model_key = st.session_state.get("active_binary_model_key", "best_model")
+    available_models = ["best_model"] + [
+        k for k in MODEL_SPECS if (paths.binary_models_dir / f"{k}.joblib").is_file()
+    ]
     model_choice = st.selectbox(
         "Model for Batch Scoring",
-        model_options,
+        available_models,
+        index=available_models.index(active_model_key) if active_model_key in available_models else 0,
         format_func=lambda k: "Best Selected Model (Default)" if k == "best_model" else MODEL_SPECS[k].display_name,
     )
 

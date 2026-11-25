@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -116,3 +117,20 @@ def test_cli_check_env_succeeds(capsys) -> None:
     assert payload["features_file_found"] is True
     summary = get_environment_summary()
     assert summary["project_name"] == "NETGUARD AI"
+
+
+def test_load_local_dotenv_respects_existing_env_vars(tmp_path: Path, monkeypatch) -> None:
+    from src.utils.config import load_local_dotenv
+
+    env_file = tmp_path / ".env"
+    env_file.write_text(
+        "# comment\nNETGUARD_TEST_DOTENV_A=from_file\nNETGUARD_TEST_DOTENV_B='quoted_val'\n",
+        encoding="utf-8",
+    )
+    monkeypatch.delenv("NETGUARD_TEST_DOTENV_A", raising=False)
+    monkeypatch.setenv("NETGUARD_TEST_DOTENV_B", "existing_env_wins")
+    load_local_dotenv(env_file)
+
+    assert os.environ["NETGUARD_TEST_DOTENV_A"] == "from_file"
+    assert os.environ["NETGUARD_TEST_DOTENV_B"] == "existing_env_wins"
+    monkeypatch.delenv("NETGUARD_TEST_DOTENV_A", raising=False)

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 
 from app.components.data_access import (
@@ -153,15 +155,6 @@ def render_single_prediction() -> None:
 
     form_values: dict[str, object] = {}
     with st.form("single_prediction_form"):
-        tab_core, tab_vol, tab_rate, tab_conn = st.tabs(
-            [
-                "Protocol & State (3)",
-                "Packets & Bytes (12)",
-                "Rates, TTL & TCP Timing (14)",
-                "Connection Tracking (13)",
-            ]
-        )
-
         core_cols = ["proto", "service", "state", "dur"]
         vol_cols = [
             "spkts", "dpkts", "sbytes", "dbytes", "sloss", "dloss",
@@ -175,6 +168,15 @@ def render_single_prediction() -> None:
             col for col in schema["feature_names"]
             if col not in set(core_cols + vol_cols + rate_cols)
         ]
+
+        tab_core, tab_vol, tab_rate, tab_conn = st.tabs(
+            [
+                f"Protocol, Service & Duration ({len(core_cols)})",
+                f"Packets & Bytes ({len(vol_cols)})",
+                f"Rates, TTL & TCP Timing ({len(rate_cols)})",
+                f"Connection Tracking ({len(conn_cols)})",
+            ]
+        )
 
         def _render_fields(cols_list: list[str]) -> None:
             grid = st.columns(3)
@@ -246,8 +248,9 @@ def render_single_prediction() -> None:
             )
 
             badge_cls = "ng-badge-malicious" if result.predicted_label == 1 else "ng-badge-normal"
+            safe_class = html.escape(result.predicted_class.upper(), quote=True)
             st.markdown(
-                f"### Prediction Result: <span class='{badge_cls}'>{result.predicted_class.upper()}</span>",
+                f"### Prediction Result: <span class='{badge_cls}'>{safe_class}</span>",
                 unsafe_allow_html=True,
             )
 

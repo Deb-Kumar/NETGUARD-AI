@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 
 from app.components.charts import plotly_attack_category_bars, plotly_binary_donut
@@ -87,8 +89,9 @@ def render_dashboard() -> None:
         with col:
             cls = "ng-badge-normal" if ready else "ng-badge-warn"
             state_txt = "READY" if ready else "PENDING"
+            safe_label = html.escape(str(label), quote=True)
             st.markdown(
-                f"<div class='ng-card'><div>{label}</div><div style='margin-top:0.4rem;'>"
+                f"<div class='ng-card'><div>{safe_label}</div><div style='margin-top:0.4rem;'>"
                 f"<span class='{cls}'>{state_txt}</span></div></div>",
                 unsafe_allow_html=True,
             )

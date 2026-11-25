@@ -296,6 +296,8 @@ def predict_batch_csv(
         )
 
     try:
+        if hasattr(csv_source, "seek"):
+            csv_source.seek(0)
         raw_df = pd.read_csv(csv_source, encoding="utf-8-sig", low_memory=False)
     except UnicodeDecodeError:
         if hasattr(csv_source, "seek"):
