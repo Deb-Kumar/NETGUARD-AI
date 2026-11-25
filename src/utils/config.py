@@ -15,12 +15,25 @@ PROJECT_TITLE: str = (
 )
 APP_VERSION: str = "0.2.0"
 
+
+def _int_env(var_name: str, default: int, *, min_val: int = 1, max_val: int = 1024) -> int:
+    """Safely parse a bounded integer environment override."""
+    raw = os.getenv(var_name)
+    if not raw:
+        return default
+    try:
+        parsed = int(raw)
+    except ValueError:
+        return default
+    return max(min_val, min(max_val, parsed))
+
+
 # Reproducibility and resource defaults
 RANDOM_STATE: int = 42
 CV_FOLDS: int = 5
 # Bounded default worker count to prevent memory exhaustion on Windows systems.
-DEFAULT_N_JOBS: int = 2
-MAX_UPLOAD_SIZE_MB: int = 50
+DEFAULT_N_JOBS: int = _int_env("NETGUARD_N_JOBS", 2, min_val=1, max_val=8)
+MAX_UPLOAD_SIZE_MB: int = _int_env("NETGUARD_MAX_UPLOAD_MB", 50, min_val=1, max_val=200)
 MAX_UPLOAD_SIZE_BYTES: int = MAX_UPLOAD_SIZE_MB * 1024 * 1024
 
 # Dataset schema constants (verified against UNSW-NB15 training/testing CSVs)
@@ -66,6 +79,8 @@ class ProjectPaths:
     root: Path
     dataset_dir: Path
     raw_data_dir: Path
+    raw_csv_dir: Path
+    raw_docs_dir: Path
     processed_data_dir: Path
     training_testing_dir: Path
     src_dir: Path
@@ -77,17 +92,22 @@ class ProjectPaths:
     database_dir: Path
     db_path: Path
     reports_dir: Path
-    reports_figures_dir: Path
+    reports_graphs_dir: Path
+    reports_experiments_dir: Path
+    logs_dir: Path
     notebooks_dir: Path
     tests_dir: Path
 
     def resolve_dataset_file(self, filename: str) -> Path | None:
-        """Locate a dataset file without moving or modifying original files.
+        """Locate a dataset file without modifying or copying original files.
 
-        Searches ``dataset/raw``, ``Training and Testing Sets``, and the project
-        root in deterministic order and returns the first existing path.
+        Searches organized ``dataset/raw/csv/`` directories first, followed by
+        legacy root locations for backward compatibility.
         """
         candidates = (
+            self.raw_csv_dir / "Training and Testing Sets" / filename,
+            self.raw_csv_dir / filename,
+            self.raw_docs_dir / filename,
             self.raw_data_dir / filename,
             self.training_testing_dir / filename,
             self.root / filename,
@@ -132,15 +152,19 @@ def get_paths(project_root: Path | None = None) -> ProjectPaths:
     """Build a ProjectPaths instance rooted at ``project_root`` (or default root)."""
     root = project_root.resolve() if project_root is not None else get_project_root()
     dataset_dir = root / "dataset"
+    raw_data_dir = dataset_dir / "raw"
+    raw_csv_dir = raw_data_dir / "csv"
     models_dir = root / "models"
     database_dir = root / "database"
     reports_dir = root / "reports"
     return ProjectPaths(
         root=root,
         dataset_dir=dataset_dir,
-        raw_data_dir=dataset_dir / "raw",
+        raw_data_dir=raw_data_dir,
+        raw_csv_dir=raw_csv_dir,
+        raw_docs_dir=raw_data_dir / "documentation",
         processed_data_dir=dataset_dir / "processed",
-        training_testing_dir=root / "Training and Testing Sets",
+        training_testing_dir=raw_csv_dir / "Training and Testing Sets",
         src_dir=root / "src",
         app_dir=root / "app",
         models_dir=models_dir,
@@ -150,7 +174,9 @@ def get_paths(project_root: Path | None = None) -> ProjectPaths:
         database_dir=database_dir,
         db_path=database_dir / "netguard_history.db",
         reports_dir=reports_dir,
-        reports_figures_dir=reports_dir / "figures",
+        reports_graphs_dir=reports_dir / "graphs",
+        reports_experiments_dir=reports_dir / "experiments",
+        logs_dir=root / "logs",
         notebooks_dir=root / "notebooks",
         tests_dir=root / "tests",
     )
@@ -161,13 +187,17 @@ def ensure_directories(paths: ProjectPaths | None = None) -> ProjectPaths:
     resolved = paths or get_paths()
     required_dirs = (
         resolved.raw_data_dir,
+        resolved.raw_csv_dir,
+        resolved.raw_docs_dir,
         resolved.processed_data_dir,
         resolved.binary_models_dir,
         resolved.multiclass_models_dir,
         resolved.model_metadata_dir,
         resolved.database_dir,
         resolved.reports_dir,
-        resolved.reports_figures_dir,
+        resolved.reports_graphs_dir,
+        resolved.reports_experiments_dir,
+        resolved.logs_dir,
         resolved.notebooks_dir,
         resolved.tests_dir,
     )

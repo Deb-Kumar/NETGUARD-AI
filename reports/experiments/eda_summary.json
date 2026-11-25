@@ -1556,14 +1556,14 @@
     }
   },
   "generated_figures": {
-    "binary_class_distribution": "D:\\Project\\NETGUARD-AI\\reports\\figures\\01_binary_class_distribution.png",
-    "attack_category_distribution": "D:\\Project\\NETGUARD-AI\\reports\\figures\\02_attack_category_distribution.png",
-    "protocol_distribution": "D:\\Project\\NETGUARD-AI\\reports\\figures\\03_protocol_distribution.png",
-    "service_distribution": "D:\\Project\\NETGUARD-AI\\reports\\figures\\04_service_distribution.png",
-    "numerical_feature_distributions": "D:\\Project\\NETGUARD-AI\\reports\\figures\\05_numerical_feature_distributions.png",
-    "outlier_boxplots": "D:\\Project\\NETGUARD-AI\\reports\\figures\\06_outlier_boxplots.png",
-    "correlation_heatmap": "D:\\Project\\NETGUARD-AI\\reports\\figures\\07_correlation_heatmap.png",
-    "state_distribution": "D:\\Project\\NETGUARD-AI\\reports\\figures\\08_state_distribution.png"
+    "binary_class_distribution": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\01_binary_class_distribution.png",
+    "attack_category_distribution": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\02_attack_category_distribution.png",
+    "protocol_distribution": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\03_protocol_distribution.png",
+    "service_distribution": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\04_service_distribution.png",
+    "numerical_feature_distributions": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\05_numerical_feature_distributions.png",
+    "outlier_boxplots": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\06_outlier_boxplots.png",
+    "correlation_heatmap": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\07_correlation_heatmap.png",
+    "state_distribution": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\08_state_distribution.png"
   },
   "sampling_notes": {
     "numerical_feature_distributions": "Stratified sample of 30,000 training rows (random_state=42).",

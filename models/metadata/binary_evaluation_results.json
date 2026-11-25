@@ -15,8 +15,8 @@
         "false_positive_rate": 0.2814,
         "specificity": 0.7186,
         "false_negative_rate": 0.0698,
-        "prediction_latency_ms_total": 299.6,
-        "prediction_latency_ms_per_1000": 3.639
+        "prediction_latency_ms_total": 279.18,
+        "prediction_latency_ms_per_1000": 3.391
       },
       "confusion_matrix": {
         "labels": [
@@ -894,8 +894,8 @@
         "false_positive_rate": 0.2493,
         "specificity": 0.7507,
         "false_negative_rate": 0.036,
-        "prediction_latency_ms_total": 214.08,
-        "prediction_latency_ms_per_1000": 2.6
+        "prediction_latency_ms_total": 244.75,
+        "prediction_latency_ms_per_1000": 2.973
       },
       "confusion_matrix": {
         "labels": [
@@ -1109,8 +1109,8 @@
         "false_positive_rate": 0.179,
         "specificity": 0.821,
         "false_negative_rate": 0.0295,
-        "prediction_latency_ms_total": 745.15,
-        "prediction_latency_ms_per_1000": 9.051
+        "prediction_latency_ms_total": 765.28,
+        "prediction_latency_ms_per_1000": 9.295
       },
       "confusion_matrix": {
         "labels": [
@@ -1987,7 +1987,7 @@
       "Specificity": 0.821,
       "FPR": 0.179,
       "FNR": 0.0295,
-      "Latency (ms/1k)": 9.051,
+      "Latency (ms/1k)": 9.295,
       "False Negatives": 1338,
       "False Positives": 6624
     },
@@ -2003,7 +2003,7 @@
       "Specificity": 0.7507,
       "FPR": 0.2493,
       "FNR": 0.036,
-      "Latency (ms/1k)": 2.6,
+      "Latency (ms/1k)": 2.973,
       "False Negatives": 1634,
       "False Positives": 9223
     },
@@ -2019,7 +2019,7 @@
       "Specificity": 0.7186,
       "FPR": 0.2814,
       "FNR": 0.0698,
-      "Latency (ms/1k)": 3.639,
+      "Latency (ms/1k)": 3.391,
       "False Negatives": 3163,
       "False Positives": 10413
     }

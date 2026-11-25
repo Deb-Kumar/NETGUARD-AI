@@ -8,7 +8,7 @@ import streamlit as st
 
 from app.components.charts import plotly_attack_category_bars, plotly_binary_donut
 from app.components.data_access import list_saved_figures, load_json_artifact
-from app.components.theme import COLOR_CARD, COLOR_TEXT, render_page_header, render_setup_message
+from app.styles.theme import COLOR_CARD, COLOR_TEXT, render_page_header, render_setup_message
 
 
 def render_eda_analytics() -> None:
@@ -18,7 +18,7 @@ def render_eda_analytics() -> None:
         "Statistical distributions, outlier bounds, protocol/service breakdown, and correlations",
     )
 
-    eda = load_json_artifact("reports/eda_summary.json")
+    eda = load_json_artifact("reports/experiments/eda_summary.json")
     if eda is None:
         render_setup_message("EDA Results Not Generated", "python main.py run-eda")
         return

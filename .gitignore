@@ -21,6 +21,7 @@ htmlcov/
 # Secrets & environment config
 .env
 .env.*
+!.env.example
 .streamlit/secrets.toml
 
 # OS & Editor files
@@ -29,18 +30,22 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Raw UNSW-NB15 datasets & PDFs in root (never commit large raw datasets)
+# Logs (preserve directory placeholder)
+logs/*
+!logs/.gitkeep
+
+# Raw UNSW-NB15 datasets & documentation (never commit large raw datasets)
+dataset/raw/*
+!dataset/raw/.gitkeep
+dataset/processed/*
+!dataset/processed/.gitkeep
+
+# Legacy root dataset safeguards
 /Training and Testing Sets/
 /UNSW-NB15_*.csv
 /NUSW-NB15_*.csv
 /ReadMe.pdf
 /The UNSW-NB15 description.pdf
-
-# Organized dataset directories (preserve directory placeholders only)
-dataset/raw/*
-!dataset/raw/.gitkeep
-dataset/processed/*
-!dataset/processed/.gitkeep
 
 # Serialized models & local SQLite databases
 models/binary/*
@@ -51,6 +56,6 @@ database/*.db
 database/*.db-*
 database/*.sqlite*
 
-# Generated large reports/figures (preserve structure)
-reports/figures/*
-!reports/figures/.gitkeep
+# Generated large graph images (preserve directory placeholder)
+reports/graphs/*
+!reports/graphs/.gitkeep

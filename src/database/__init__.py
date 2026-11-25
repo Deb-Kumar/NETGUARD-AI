@@ -1,6 +1,6 @@
 """SQLite prediction history persistence for NETGUARD AI."""
 
-from src.database.history_db import (
+from src.database.db_manager import (
     clear_history,
     export_history_csv,
     init_db,

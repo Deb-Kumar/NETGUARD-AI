@@ -7,7 +7,7 @@ import streamlit as st
 
 from app.components.charts import plotly_cv_fold_scores, plotly_model_comparison_bars
 from app.components.data_access import load_json_artifact
-from app.components.theme import (
+from app.styles.theme import (
     COLOR_BLUE,
     COLOR_GREEN,
     render_kpi_card,

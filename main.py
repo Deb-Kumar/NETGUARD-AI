@@ -46,6 +46,7 @@ from src.utils.config import (
     get_environment_summary,
     get_paths,
 )
+from src.utils.logger import configure_logging
 
 CORE_PACKAGES: tuple[str, ...] = (
     "pandas",
@@ -137,7 +138,7 @@ def run_inspect_data(
         report["raw_parts_summary"] = raw_parts_summary
 
     if save_report:
-        out_path = paths.reports_dir / "dataset_inspection_report.json"
+        out_path = paths.reports_experiments_dir / "dataset_inspection_report.json"
         out_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
         report["saved_report_path"] = str(out_path)
 
@@ -146,7 +147,7 @@ def run_inspect_data(
 
 
 def run_eda(*, no_plots: bool = False) -> int:
-    """Execute full Exploratory Data Analysis and write reports/figures."""
+    """Execute full Exploratory Data Analysis and write reports/graphs/."""
     paths = ensure_directories(get_paths(Path(__file__).resolve().parent))
     try:
         eda_summary = run_eda_pipeline(paths=paths, generate_plots=not no_plots)
@@ -422,8 +423,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     """Run the NETGUARD AI CLI."""
+    logger = configure_logging("netguard", log_to_file=True)
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.command:
+        logger.info("Executing NETGUARD AI CLI command: %s", args.command)
 
     if args.command == "check-env":
         return run_check_env()

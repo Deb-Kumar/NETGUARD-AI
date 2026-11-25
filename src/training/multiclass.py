@@ -95,7 +95,7 @@ def train_and_evaluate_multiclass(
 
     plot_path: str | None = None
     if generate_plot:
-        fig_out = resolved_paths.reports_figures_dir / "13_multiclass_confusion_matrix.png"
+        fig_out = resolved_paths.reports_graphs_dir / "13_multiclass_confusion_matrix.png"
         plot_multiclass_confusion_matrix(candidates[winner_key], fig_out)
         plot_path = str(fig_out)
 

@@ -11,7 +11,7 @@ from app.components.charts import (
     plotly_roc_curves,
 )
 from app.components.data_access import load_json_artifact
-from app.components.theme import (
+from app.styles.theme import (
     COLOR_AMBER,
     COLOR_BLUE,
     COLOR_GREEN,

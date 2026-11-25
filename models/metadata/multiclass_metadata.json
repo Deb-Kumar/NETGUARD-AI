@@ -70,7 +70,7 @@
   "selected_model_key": "random_forest",
   "selected_model_name": "Random Forest Classifier",
   "best_model_artifact": "D:\\Project\\NETGUARD-AI\\models\\multiclass\\best_model.joblib",
-  "confusion_matrix_plot": "D:\\Project\\NETGUARD-AI\\reports\\figures\\13_multiclass_confusion_matrix.png",
+  "confusion_matrix_plot": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\13_multiclass_confusion_matrix.png",
   "models": {
     "decision_tree": {
       "model_key": "decision_tree",

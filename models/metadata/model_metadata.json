@@ -51,7 +51,7 @@
     "ct_srv_dst",
     "is_sm_ips_ports"
   ],
-  "training_date_utc": "2026-11-25T21:48:55.410233+00:00",
+  "training_date_utc": "2026-11-25T22:25:35.290623+00:00",
   "selection_strategy": "cybersecurity_composite",
   "selection_strategy_description": "Non-redundant weighted cybersecurity score: 0.30*CV_F1 + 0.30*CV_ROC_AUC + 0.25*CV_Recall + 0.15*CV_Precision (computed strictly on validation folds).",
   "selected_model_key": "random_forest",
@@ -123,8 +123,8 @@
       "false_positive_rate": 0.179,
       "specificity": 0.821,
       "false_negative_rate": 0.0295,
-      "prediction_latency_ms_total": 745.15,
-      "prediction_latency_ms_per_1000": 9.051
+      "prediction_latency_ms_total": 765.28,
+      "prediction_latency_ms_per_1000": 9.295
     },
     "confusion_matrix": {
       "labels": [
@@ -1000,7 +1000,7 @@
       "Specificity": 0.821,
       "FPR": 0.179,
       "FNR": 0.0295,
-      "Latency (ms/1k)": 9.051,
+      "Latency (ms/1k)": 9.295,
       "False Negatives": 1338,
       "False Positives": 6624
     },
@@ -1016,7 +1016,7 @@
       "Specificity": 0.7507,
       "FPR": 0.2493,
       "FNR": 0.036,
-      "Latency (ms/1k)": 2.6,
+      "Latency (ms/1k)": 2.973,
       "False Negatives": 1634,
       "False Positives": 9223
     },
@@ -1032,17 +1032,17 @@
       "Specificity": 0.7186,
       "FPR": 0.2814,
       "FNR": 0.0698,
-      "Latency (ms/1k)": 3.639,
+      "Latency (ms/1k)": 3.391,
       "False Negatives": 3163,
       "False Positives": 10413
     }
   ],
   "evaluation_results_path": "D:\\Project\\NETGUARD-AI\\models\\metadata\\binary_evaluation_results.json",
   "evaluation_plots": {
-    "confusion_matrices": "D:\\Project\\NETGUARD-AI\\reports\\figures\\09_confusion_matrices_binary.png",
-    "roc_curves": "D:\\Project\\NETGUARD-AI\\reports\\figures\\10_roc_curves_binary.png",
-    "pr_curves": "D:\\Project\\NETGUARD-AI\\reports\\figures\\11_pr_curves_binary.png",
-    "metrics_comparison": "D:\\Project\\NETGUARD-AI\\reports\\figures\\12_model_metrics_comparison.png"
+    "confusion_matrices": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\09_confusion_matrices_binary.png",
+    "roc_curves": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\10_roc_curves_binary.png",
+    "pr_curves": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\11_pr_curves_binary.png",
+    "metrics_comparison": "D:\\Project\\NETGUARD-AI\\reports\\graphs\\12_model_metrics_comparison.png"
   },
   "model_parameters": {
     "bootstrap": true,

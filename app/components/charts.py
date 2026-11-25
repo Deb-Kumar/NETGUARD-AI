@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from app.components.theme import (
+from app.styles.theme import (
     COLOR_AMBER,
     COLOR_BLUE,
     COLOR_CARD,

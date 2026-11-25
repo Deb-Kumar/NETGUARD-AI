@@ -6,7 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from app.components.data_access import get_artifact_status, list_saved_figures, load_json_artifact
-from app.components.theme import render_page_header
+from app.styles.theme import render_page_header
 from src.database import clear_history, export_history_csv, query_history
 from src.models import MODEL_SPECS
 from src.utils.config import (
@@ -98,8 +98,8 @@ def render_reports_exports() -> None:
 
     paths = get_paths()
     report_files = [
-        ("Dataset Inspection Report", paths.reports_dir / "dataset_inspection_report.json"),
-        ("EDA Summary Report", paths.reports_dir / "eda_summary.json"),
+        ("Dataset Inspection Report", paths.reports_experiments_dir / "dataset_inspection_report.json"),
+        ("EDA Summary Report", paths.reports_experiments_dir / "eda_summary.json"),
         ("Preprocessing Configuration", paths.model_metadata_dir / "preprocessing_config.json"),
         ("Binary Training Summary", paths.model_metadata_dir / "binary_training_summary.json"),
         ("5-Fold Cross-Validation Results", paths.model_metadata_dir / "cv_results.json"),
@@ -141,7 +141,7 @@ def render_reports_exports() -> None:
     st.subheader("Generated Visualization Gallery")
     figures = list_saved_figures()
     if not figures:
-        st.info("No PNG charts found in reports/figures/. Run EDA or model evaluation first.")
+        st.info("No PNG charts found in reports/graphs/. Run EDA or model evaluation first.")
     else:
         for title, fig_path in figures:
             with st.expander(title):

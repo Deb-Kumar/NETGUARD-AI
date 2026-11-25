@@ -458,7 +458,7 @@ def run_eda_pipeline(
 
     if generate_plots:
         _configure_plot_style()
-        fig_dir = resolved_paths.reports_figures_dir
+        fig_dir = resolved_paths.reports_graphs_dir
 
         fig1 = fig_dir / "01_binary_class_distribution.png"
         _plot_binary_class_distribution(train_df, test_df, fig1)
@@ -537,7 +537,7 @@ def run_eda_pipeline(
         "sampling_notes": sampling_notes,
     }
 
-    summary_path = resolved_paths.reports_dir / "eda_summary.json"
+    summary_path = resolved_paths.reports_experiments_dir / "eda_summary.json"
     summary_path.write_text(json.dumps(eda_summary, indent=2), encoding="utf-8")
     eda_summary["summary_path"] = str(summary_path)
     return eda_summary

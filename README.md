@@ -55,7 +55,7 @@ UNSW-NB15 CSVs (Read-Only)
    │
    ▼
 [src/data/] loader.py + validator.py + eda.py
-   │  (Encoding fallback, chunking, DataLeakageError guards, EDA reports/figures)
+   │  (Encoding fallback, chunking, DataLeakageError guards, EDA reports/graphs & experiments)
    ▼
 [src/preprocessing/] pipeline.py
    │  (NetworkFeatureEngineer + ColumnTransformer: median/most_frequent,
@@ -96,21 +96,36 @@ NETGUARD-AI/
 │   ├── __init__.py
 │   ├── app.py
 │   ├── components/
+│   │   ├── __init__.py
 │   │   ├── charts.py
-│   │   ├── data_access.py
-│   │   └── theme.py
-│   └── views/
-│       ├── cv_tuning_comparison.py
-│       ├── dataset_views.py
-│       ├── eda_preprocessing.py
-│       ├── history_reports_system.py
-│       ├── overview.py
-│       ├── prediction_views.py
-│       └── training_eval_views.py
+│   │   └── data_access.py
+│   ├── pages/
+│   │   ├── __init__.py
+│   │   ├── batch_prediction.py
+│   │   ├── cv_tuning_comparison.py
+│   │   ├── dashboard.py
+│   │   ├── dataset_views.py
+│   │   ├── eda_preprocessing.py
+│   │   ├── history_reports_system.py
+│   │   ├── single_prediction.py
+│   │   └── training_eval_views.py
+│   └── styles/
+│       ├── __init__.py
+│       └── theme.py
 ├── database/
 ├── dataset/
 │   ├── processed/
 │   └── raw/
+│       ├── csv/
+│       │   ├── Training and Testing Sets/
+│       │   ├── NUSW-NB15_features.csv
+│       │   ├── NUSW-NB15_GT.csv
+│       │   ├── UNSW-NB15_1.csv .. UNSW-NB15_4.csv
+│       │   └── UNSW-NB15_LIST_EVENTS.csv
+│       └── documentation/
+│           ├── ReadMe.pdf
+│           └── The UNSW-NB15 description.pdf
+├── logs/
 ├── models/
 │   ├── binary/
 │   ├── metadata/
@@ -123,41 +138,55 @@ NETGUARD-AI/
 │   ├── 05_model_evaluation.ipynb
 │   └── 06_hyperparameter_tuning.ipynb
 ├── reports/
-│   ├── figures/
+│   ├── experiments/
+│   │   ├── dataset_inspection_report.json
+│   │   └── eda_summary.json
 │   ├── final_audit/
+│   ├── graphs/
 │   ├── MCA_PBL_PROJECT_REPORT.md
 │   ├── cleanup_inspection_report.md
-│   ├── dataset_inspection_report.json
-│   └── eda_summary.json
+│   └── project_structure_report.md
 ├── src/
+│   ├── __init__.py
 │   ├── data/
+│   │   ├── __init__.py
 │   │   ├── eda.py
 │   │   ├── loader.py
 │   │   └── validator.py
 │   ├── database/
-│   │   └── history_db.py
+│   │   ├── __init__.py
+│   │   └── db_manager.py
 │   ├── evaluation/
+│   │   ├── __init__.py
 │   │   ├── evaluate.py
 │   │   └── plots.py
 │   ├── models/
+│   │   ├── __init__.py
 │   │   ├── base.py
 │   │   ├── decision_tree.py
 │   │   ├── logistic_regression.py
 │   │   └── random_forest.py
 │   ├── prediction/
+│   │   ├── __init__.py
 │   │   └── predict.py
 │   ├── preprocessing/
+│   │   ├── __init__.py
 │   │   └── pipeline.py
 │   ├── training/
+│   │   ├── __init__.py
 │   │   ├── cross_validation.py
 │   │   ├── multiclass.py
 │   │   ├── selector.py
 │   │   ├── train.py
 │   │   └── tuning.py
 │   └── utils/
-│       └── config.py
+│       ├── __init__.py
+│       ├── config.py
+│       └── logger.py
 ├── tests/
+├── .env.example
 ├── .gitignore
+├── LICENSE
 ├── main.py
 ├── pyproject.toml
 ├── README.md
@@ -173,6 +202,7 @@ cd D:\Project\NETGUARD-AI
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+Copy-Item .env.example .env   # Optional: customize local runtime settings
 python main.py check-env
 ```
 
@@ -180,7 +210,7 @@ python main.py check-env
 
 ## 9. Dataset Setup Instructions
 
-Keep the official UNSW-NB15 files (`Training and Testing Sets/UNSW_NB15_training-set.csv`, `Training and Testing Sets/UNSW_NB15_testing-set.csv`, `NUSW-NB15_features.csv`, and `UNSW-NB15_1.csv`–`4.csv`) in the project root or `dataset/raw/`. Validate discovery and integrity:
+Keep the official UNSW-NB15 CSV files (`Training and Testing Sets/UNSW_NB15_training-set.csv`, `Training and Testing Sets/UNSW_NB15_testing-set.csv`, `NUSW-NB15_features.csv`, `NUSW-NB15_GT.csv`, `UNSW-NB15_LIST_EVENTS.csv`, and `UNSW-NB15_1.csv`–`4.csv`) inside `dataset/raw/csv/`, and dataset documentation PDFs inside `dataset/raw/documentation/` (`dataset/raw/` and project root remain supported fallback locations). Validate discovery and integrity:
 
 ```powershell
 python main.py inspect-data --save-report
@@ -259,7 +289,7 @@ streamlit run app/app.py
 
 ---
 
-## 14. Visual Reports Generated (`reports/figures/`)
+## 14. Visual Reports Generated (`reports/graphs/`)
 
 1. `01_binary_class_distribution.png` — Binary Normal vs Malicious class distribution
 2. `02_attack_category_distribution.png` — 10-class `attack_cat` distribution
@@ -275,7 +305,7 @@ streamlit run app/app.py
 12. `12_model_metrics_comparison.png` — Multi-metric cybersecurity bar comparison
 13. `13_multiclass_confusion_matrix.png` — 10-class row-normalized confusion matrix
 
-*(Dashboard screenshots can be captured in `reports/` after launching `streamlit run app/app.py` for MCA submission.)*
+*(Dashboard screenshots can be captured in `reports/graphs/` after launching `streamlit run app/app.py` for MCA submission.)*
 
 ---
 

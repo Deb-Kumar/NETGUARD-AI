@@ -23,8 +23,8 @@ import sys
 root = {root_repr}
 if root not in sys.path:
     sys.path.insert(0, root)
-from app.components.theme import apply_cyber_theme
-from app.views.prediction_views import render_single_prediction
+from app.styles.theme import apply_cyber_theme
+from app.pages.single_prediction import render_single_prediction
 apply_cyber_theme()
 render_single_prediction()
 """
@@ -55,8 +55,8 @@ import sys
 root = {root_repr}
 if root not in sys.path:
     sys.path.insert(0, root)
-from app.components.theme import apply_cyber_theme
-from app.views.history_reports_system import render_prediction_history
+from app.styles.theme import apply_cyber_theme
+from app.pages.history_reports_system import render_prediction_history
 apply_cyber_theme()
 render_prediction_history()
 """
@@ -87,8 +87,8 @@ import sys
 root = {root_repr}
 if root not in sys.path:
     sys.path.insert(0, root)
-from app.components.theme import apply_cyber_theme
-from app.views.history_reports_system import render_settings
+from app.styles.theme import apply_cyber_theme
+from app.pages.history_reports_system import render_settings
 apply_cyber_theme()
 render_settings()
 """

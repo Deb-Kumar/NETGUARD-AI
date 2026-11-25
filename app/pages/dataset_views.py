@@ -10,7 +10,7 @@ from app.components.data_access import (
     load_json_artifact,
     load_sample_split,
 )
-from app.components.theme import render_page_header, render_setup_message
+from app.styles.theme import render_page_header, render_setup_message
 from src.utils.config import get_paths
 
 
@@ -47,7 +47,7 @@ def render_dataset_management() -> None:
     st.subheader("Detected UNSW-NB15 Files")
     st.dataframe(pd.DataFrame(inventory_rows), width="stretch", hide_index=True)
 
-    inspection = load_json_artifact("reports/dataset_inspection_report.json")
+    inspection = load_json_artifact("reports/experiments/dataset_inspection_report.json")
     if inspection is None:
         render_setup_message(
             "Dataset Inspection Report Not Found",

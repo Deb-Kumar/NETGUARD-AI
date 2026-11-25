@@ -6,7 +6,7 @@ import streamlit as st
 
 from app.components.charts import plotly_attack_category_bars, plotly_binary_donut
 from app.components.data_access import get_artifact_status, load_json_artifact
-from app.components.theme import (
+from app.styles.theme import (
     COLOR_AMBER,
     COLOR_BLUE,
     COLOR_GREEN,
@@ -27,7 +27,7 @@ def render_dashboard() -> None:
 
     status = get_artifact_status()
     model_meta = load_json_artifact("models/metadata/model_metadata.json")
-    eda_summary = load_json_artifact("reports/eda_summary.json")
+    eda_summary = load_json_artifact("reports/experiments/eda_summary.json")
     mc_meta = load_json_artifact("models/metadata/multiclass_metadata.json")
 
     if not status["train_dataset"] or not status["test_dataset"]:

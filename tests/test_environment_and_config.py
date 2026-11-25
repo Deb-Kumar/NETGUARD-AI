@@ -60,7 +60,9 @@ def test_project_directory_structure_exists() -> None:
         paths.model_metadata_dir,
         paths.database_dir,
         paths.reports_dir,
-        paths.reports_figures_dir,
+        paths.reports_graphs_dir,
+        paths.reports_experiments_dir,
+        paths.logs_dir,
         paths.notebooks_dir,
         paths.tests_dir,
     )
@@ -68,6 +70,8 @@ def test_project_directory_structure_exists() -> None:
         assert directory.is_dir(), f"Missing directory: {directory}"
 
     assert (paths.root / ".gitignore").is_file()
+    assert (paths.root / ".env.example").is_file()
+    assert (paths.root / "LICENSE").is_file()
     assert (paths.root / "requirements.txt").is_file()
     assert (paths.root / "README.md").is_file()
     assert (paths.root / "main.py").is_file()
@@ -96,7 +100,9 @@ def test_ensure_directories_is_idempotent_in_temp_root(tmp_path: Path) -> None:
     temp_paths = get_paths(tmp_path)
     ensure_directories(temp_paths)
     assert temp_paths.binary_models_dir.is_dir()
-    assert temp_paths.reports_figures_dir.is_dir()
+    assert temp_paths.reports_graphs_dir.is_dir()
+    assert temp_paths.reports_experiments_dir.is_dir()
+    assert temp_paths.logs_dir.is_dir()
     assert temp_paths.train_dataset_path is None
 
 

@@ -14,35 +14,33 @@ sys.path = [p for p in sys.path if Path(p).resolve() != APP_DIR]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from app.components.theme import apply_cyber_theme  # noqa: E402
-from app.views.cv_tuning_comparison import (  # noqa: E402
+from app.pages.batch_prediction import render_batch_prediction  # noqa: E402
+from app.pages.cv_tuning_comparison import (  # noqa: E402
     render_cross_validation,
     render_hyperparameter_tuning,
     render_model_comparison,
 )
-from app.views.dataset_views import (  # noqa: E402
+from app.pages.dashboard import render_dashboard  # noqa: E402
+from app.pages.dataset_views import (  # noqa: E402
     render_dataset_explorer,
     render_dataset_management,
 )
-from app.views.eda_preprocessing import (  # noqa: E402
+from app.pages.eda_preprocessing import (  # noqa: E402
     render_data_preprocessing,
     render_eda_analytics,
 )
-from app.views.history_reports_system import (  # noqa: E402
+from app.pages.history_reports_system import (  # noqa: E402
     render_about_project,
     render_prediction_history,
     render_reports_exports,
     render_settings,
 )
-from app.views.overview import render_dashboard  # noqa: E402
-from app.views.prediction_views import (  # noqa: E402
-    render_batch_prediction,
-    render_single_prediction,
-)
-from app.views.training_eval_views import (  # noqa: E402
+from app.pages.single_prediction import render_single_prediction  # noqa: E402
+from app.pages.training_eval_views import (  # noqa: E402
     render_model_evaluation,
     render_model_training,
 )
+from app.styles.theme import apply_cyber_theme  # noqa: E402
 from src.utils.config import APP_VERSION, PROJECT_NAME  # noqa: E402
 
 

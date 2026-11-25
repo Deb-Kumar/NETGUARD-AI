@@ -1,4 +1,4 @@
-"""Evaluation visualization charts saved to reports/figures/."""
+"""Evaluation visualization charts saved to reports/graphs/."""
 
 from __future__ import annotations
 
@@ -224,9 +224,9 @@ def generate_binary_evaluation_plots(
     *,
     paths: ProjectPaths | None = None,
 ) -> dict[str, str]:
-    """Generate all binary evaluation comparison charts into reports/figures/."""
+    """Generate all binary evaluation comparison charts into reports/graphs/."""
     resolved_paths = ensure_directories(paths or get_paths())
-    fig_dir = resolved_paths.reports_figures_dir
+    fig_dir = resolved_paths.reports_graphs_dir
     return {
         "confusion_matrices": str(
             plot_binary_confusion_matrices(

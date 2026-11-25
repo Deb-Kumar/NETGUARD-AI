@@ -86,8 +86,8 @@ def get_artifact_status() -> dict[str, bool]:
         "train_dataset": paths.train_dataset_path is not None,
         "test_dataset": paths.test_dataset_path is not None,
         "features_file": paths.features_description_path is not None,
-        "inspection_report": (paths.reports_dir / "dataset_inspection_report.json").is_file(),
-        "eda_summary": (paths.reports_dir / "eda_summary.json").is_file(),
+        "inspection_report": (paths.reports_experiments_dir / "dataset_inspection_report.json").is_file(),
+        "eda_summary": (paths.reports_experiments_dir / "eda_summary.json").is_file(),
         "preprocessing_config": (paths.model_metadata_dir / "preprocessing_config.json").is_file(),
         "training_summary": (paths.model_metadata_dir / "binary_training_summary.json").is_file(),
         "cv_results": (paths.model_metadata_dir / "cv_results.json").is_file(),
@@ -103,7 +103,7 @@ def get_artifact_status() -> dict[str, bool]:
 def list_saved_figures() -> list[tuple[str, Path]]:
     """Return sorted list of (label, Path) for generated PNG visualizations."""
     paths = get_paths()
-    if not paths.reports_figures_dir.is_dir():
+    if not paths.reports_graphs_dir.is_dir():
         return []
-    files = sorted(paths.reports_figures_dir.glob("*.png"))
+    files = sorted(paths.reports_graphs_dir.glob("*.png"))
     return [(f.stem.replace("_", " ").title(), f) for f in files]
