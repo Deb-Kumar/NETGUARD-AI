@@ -1,5 +1,7 @@
 <div align="center">
 
+<br />
+
 # 🛡️ NETGUARD AI
 
 ### AI-Powered Network Intrusion Detection & Threat Classification System
@@ -11,67 +13,105 @@
 [![Tests](https://img.shields.io/badge/Pytest-48%20Passed-10B981?style=for-the-badge&logo=pytest&logoColor=white)](#evaluation--automated-testing)
 [![License](https://img.shields.io/badge/License-MIT-6366F1?style=for-the-badge)](LICENSE)
 
-**End-to-end network flow intrusion detection combining leakage-free Scikit-learn pipelines, Stratified 5-Fold CV, `GridSearchCV` hyperparameter optimization, independent 10-class threat categorization, SQLite audit logging, and a 16-page dark-navy cybersecurity dashboard.**
+<p>
+  <b>Leakage-Free Scikit-Learn Pipelines</b> &nbsp;·&nbsp;
+  <b>5-Fold Stratified CV &amp; GridSearchCV</b> &nbsp;·&nbsp;
+  <b>10-Class Threat Classification</b> &nbsp;·&nbsp;
+  <b>16-Page Dark-Navy SOC Dashboard</b>
+</p>
 
-[Highlights](#key-highlights) · [Architecture](#system-architecture) · [Results](#experimental-results) · [Quickstart](#installation--setup-windows) · [Dashboard](#streamlit-command-center-16-pages) · [Project Structure](#project-structure) · [Reports](#documentation--visual-reports)
+[Highlights](#key-highlights) &nbsp;|&nbsp;
+[Architecture](#system-architecture) &nbsp;|&nbsp;
+[Results](#experimental-results) &nbsp;|&nbsp;
+[Visual Gallery](#visual-analytics-gallery) &nbsp;|&nbsp;
+[Quickstart](#quickstart-and-cli) &nbsp;|&nbsp;
+[Dashboard](#streamlit-command-center) &nbsp;|&nbsp;
+[Structure](#project-structure) &nbsp;|&nbsp;
+[Reports](#documentation-and-reports)
+
+<br />
+
+<table>
+  <tr>
+    <td align="center" width="25%">
+      <h3>🎯 97.05%</h3>
+      <sub><b>Attack Recall</b><br />Untouched UNSW-NB15 Test</sub>
+    </td>
+    <td align="center" width="25%">
+      <h3>📈 0.9837</h3>
+      <sub><b>ROC-AUC Score</b><br />PR-AUC: 0.9877 · F1: 0.9170</sub>
+    </td>
+    <td align="center" width="25%">
+      <h3>🛡️ 2.95% FNR</h3>
+      <sub><b>Missed-Attack Rate</b><br />Best Composite Score: 0.97131</sub>
+    </td>
+    <td align="center" width="25%">
+      <h3>✅ 48 / 48</h3>
+      <sub><b>Automated Pytest Suite</b><br />16 Streamlit Pages Verified</sub>
+    </td>
+  </tr>
+</table>
 
 </div>
 
 ---
 
 > [!NOTE]
-> **Operational Scope & Academic Context:** Developed as an MCA Final-Year Project-Based Learning (PBL) system. **NETGUARD AI** is an offline dataset- and CSV-driven intrusion classification platform built on the UNSW-NB15 benchmark. It does **not** perform live NIC packet capture or inline traffic blocking, and ML predictions indicate statistical similarity rather than deterministic proof of malicious activity.
+> **Operational Scope & Academic Context:** Built as an MCA Final-Year Project-Based Learning (PBL) system. **NETGUARD AI** is an offline dataset- and CSV-driven intrusion classification platform trained on **UNSW-NB15** flow records. It does **not** perform live NIC packet sniffing or inline firewall blocking, and automated ML predictions indicate statistical similarity rather than guaranteed proof of an actual cyberattack.
 
 ---
 
-## Key Highlights
+<a id="key-highlights"></a>
+## Key Engineering Highlights
 
-| Pillar | Engineering Implementation |
+| Pillar | What Was Engineered |
 | :--- | :--- |
-| **Zero-Leakage Data Pipeline** | Strict `id`, `attack_cat`, and `label` exclusion enforced via `validate_no_target_leakage`; independent binary and multiclass pipelines. |
-| **Estimator-Aware Preprocessing** | Row-wise `NetworkFeatureEngineer` + `ColumnTransformer` applying `StandardScaler` selectively for linear models and `OneHotEncoder(handle_unknown="ignore")` for unseen test protocols/states (`ACC`, `CLO`). |
-| **Cybersecurity-Driven Model Selection** | Trained & tuned **Logistic Regression**, **Decision Tree**, and **Random Forest**; final winner chosen strictly on validation folds via a composite score (`0.97131`) prioritizing Attack F1, ROC-AUC, Recall, and Precision. |
-| **Independent Threat Categorizer** | Dedicated 10-class `attack_cat` Random Forest model operating without binary target leakage. |
-| **Hardened Inference & Storage** | Schema/numeric boundary validation, serialized `.joblib` path confinement, CSV formula-injection sanitization preserving negative numbers, and parameterized `sqlite3` history storage. |
-| **16-Page SOC Dashboard & 6 Notebooks** | Modular dark-navy Streamlit application (`app/`) paired with CLI automation (`main.py`), rotating logs (`logs/netguard.log`), and reproducible notebooks (`01`–`06`). |
+| **Leakage-Free Pipeline** | Enforces strict exclusion of `id`, `attack_cat`, and `label` via `validate_no_target_leakage`; train/test partitions stay strictly isolated before final evaluation. |
+| **Estimator-Aware Preprocessing** | Combines row-wise `NetworkFeatureEngineer` ratios with `ColumnTransformer`, applying `StandardScaler` exclusively for linear models and `OneHotEncoder(handle_unknown="ignore")` for unseen test states (`ACC`, `CLO`). |
+| **Cybersecurity-First Model Selection** | Benchmarks **Logistic Regression**, **Decision Tree**, and **Random Forest** using validation-only composite scoring weighted toward Attack F1, ROC-AUC, Recall, and Precision rather than raw accuracy alone. |
+| **Independent 10-Class Threat Engine** | Trains and evaluates an independent `attack_cat` Random Forest classifier across all 10 UNSW-NB15 categories without binary `label` leakage. |
+| **Hardened Inference & Audit Log** | Enforces strict schema/numeric bounds, serialized `.joblib` path confinement, CSV formula-injection neutralization preserving negative values, and thread-safe parameterized `sqlite3` history logging. |
+| **Modular App, CLI & Notebooks** | 16-page dark-navy Streamlit dashboard (`app/`), unified CLI runner (`main.py`), rotating logs (`logs/netguard.log`), and 6 interactive notebooks (`notebooks/01`–`06`). |
 
 ---
 
+<a id="system-architecture"></a>
 ## System Architecture
 
 ```mermaid
 flowchart LR
-    A["UNSW-NB15 CSVs (Read-Only)"] --> B["Data Ingestion & Validation (src/data/)"]
-    B --> C["Feature Engineering & Preprocessing (src/preprocessing/)"]
+    A["UNSW-NB15 CSVs (Read-Only)"] --> B["Ingestion & Leakage Guards (src/data/)"]
+    B --> C["Feature Engineering & ColumnTransformer (src/preprocessing/)"]
     C --> D["Training, 5-Fold CV & GridSearchCV (src/models/, src/training/)"]
-    D --> E["Test Evaluation & Composite Selector (src/evaluation/)"]
-    E --> F["Binary & Multiclass Inference + SQLite Log (src/prediction/, src/database/)"]
-    F --> G["16-Page Streamlit Dashboard & CLI (app/, main.py)"]
+    D --> E["Composite Selector & Test Evaluation (src/evaluation/)"]
+    E --> F["Single/Batch Inference & SQLite History (src/prediction/, src/database/)"]
+    F --> G["16-Page SOC Dashboard & CLI (app/, main.py)"]
 ```
 
 <details>
-<summary><strong>Pipeline Responsibilities Breakdown</strong></summary>
+<summary><strong>Explore Module Responsibilities Across Layers</strong></summary>
 
-1. **Ingestion & Validation (`src/data/loader.py`, `validator.py`, `eda.py`):** Fallback encoding handling (`utf-8` / `latin1`), memory-safe chunked CSV iteration, structural schema verification, and automated statistical/visual EDA.
-2. **Preprocessing (`src/preprocessing/pipeline.py`):** Median numerical imputation, mode categorical imputation, zero-leakage train-only fitting, and domain-specific flow ratio engineering (`NetworkFeatureEngineer`).
-3. **Training & Selection (`src/models/`, `src/training/`):** Unified pipeline wrappers for `logistic_regression`, `decision_tree`, and `random_forest`; Stratified 5-Fold Cross-Validation (`cross_validation.py`), bounded `GridSearchCV` (`tuning.py`), multi-criteria winner selection (`selector.py`), and independent multiclass training (`multiclass.py`).
-4. **Evaluation & Inference (`src/evaluation/`, `src/prediction/`, `src/database/`):** Untouched test evaluation with Confusion/ROC/PR curves, single-flow and chunked batch CSV prediction with schema/upload-size guards, and thread-safe SQLite audit logging (`db_manager.py`).
-5. **Presentation (`app/`, `main.py`):** Modular multipage Streamlit interface (`app/pages/`, `app/components/`, `app/styles/`) and scriptable CLI entrypoint (`main.py`) with centralized logging (`src/utils/logger.py`).
+1. **Data & Validation (`src/data/loader.py`, `validator.py`, `eda.py`):** Resilient `utf-8`/`latin1` CSV loading, chunked iteration for large partitions, target-leakage assertions, and 12 automated statistical EDA analyses.
+2. **Feature Engineering & Preprocessing (`src/preprocessing/pipeline.py`):** Median/mode imputation fitted solely on training folds plus non-leaking flow asymmetry ratios inside `NetworkFeatureEngineer`.
+3. **Model Training & Optimization (`src/models/`, `src/training/`):** Unified estimators (`logistic_regression.py`, `decision_tree.py`, `random_forest.py`), 5-fold `StratifiedKFold` CV (`cross_validation.py`), `GridSearchCV` hyperparameter search (`tuning.py`), composite winner selector (`selector.py`), and independent multiclass training (`multiclass.py`).
+4. **Evaluation, Inference & Storage (`src/evaluation/`, `src/prediction/`, `src/database/`):** Binary/multiclass metrics and chart generation, strict single-record and chunked batch CSV inference (`predict.py`), and parameterized SQLite history management (`db_manager.py`).
+5. **Interface, Config & Observability (`app/`, `main.py`, `src/utils/`):** Multipage Streamlit app (`app/pages/`, `app/components/`, `app/styles/`), central path/env management (`config.py`), and rotating file/console logger (`logger.py`).
 
 </details>
 
 ---
 
+<a id="experimental-results"></a>
 ## Experimental Results
 
-All models were trained strictly on the predefined UNSW-NB15 training partition (`175,341` rows) and evaluated once against the untouched testing partition (`82,332` rows).
+Models were trained and tuned strictly on the predefined UNSW-NB15 training set (`175,341` rows) and evaluated once against the untouched testing partition (`82,332` rows).
 
 > [!IMPORTANT]
-> **Selected Production Champion — Random Forest Classifier** (`cybersecurity_composite` validation score: **`0.97131`**)
-> Best tuned parameters: `n_estimators=100`, `max_depth=25`, `min_samples_split=2`, `min_samples_leaf=1`.
-> **Untouched Test Performance:** **97.05% Attack Recall** · **0.9170 F1** · **0.9837 ROC-AUC** · **0.9877 PR-AUC** · **2.95% FNR** (`TP=43,994`, `TN=30,376`, `FP=6,624`, `FN=1,338`).
+> **Production Champion — Random Forest Classifier** (`cybersecurity_composite` validation score: **`0.97131`**)
+> Tuned hyperparameters: `n_estimators=100` · `max_depth=25` · `min_samples_split=2` · `min_samples_leaf=1`
+> **Untouched Test Matrix (`N = 82,332`):** `TP = 43,994` · `TN = 30,376` · `FP = 6,624` · `FN = 1,338`
 
-### 1. 5-Fold Stratified Cross-Validation (Training Set: 175,341 Rows)
+### 1. 5-Fold Stratified Cross-Validation (Training Partition: 175,341 Rows)
 
 | Model | CV Recall (Mean ± Std) | CV Precision | CV F1 (Mean ± Std) | CV Accuracy | CV ROC-AUC | Runtime |
 | :--- | :---: | :---: | :---: | :---: | :---: | ---: |
@@ -79,7 +119,7 @@ All models were trained strictly on the predefined UNSW-NB15 training partition 
 | Decision Tree Classifier | 0.9412 ± 0.0025 | 0.9774 | 0.9589 ± 0.0008 | 0.9451 | 0.9738 | 37.95 s |
 | Logistic Regression | 0.9513 ± 0.0025 | 0.9495 | 0.9504 ± 0.0014 | 0.9324 | 0.9844 | 25.27 s |
 
-### 2. Untouched Test Set Comparison (82,332 Rows, Refitted on Tuned Hyperparameters)
+### 2. Untouched Test Set Evaluation (82,332 Rows, Refitted on Full Training Set)
 
 | Model | Accuracy | Precision | Attack Recall | Attack F1 | ROC-AUC | PR-AUC | Specificity | FNR | Latency (ms / 1k) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | ---: |
@@ -88,36 +128,83 @@ All models were trained strictly on the predefined UNSW-NB15 training partition 
 | Logistic Regression | 0.8351 | 0.8020 | 0.9302 | 0.8613 | 0.9558 | 0.9664 | 0.7186 | 0.0698 | 3.391 |
 
 <details>
-<summary><strong>Tuned Hyperparameters & Independent 10-Class Multiclass Metrics</strong></summary>
+<summary><strong>View Tuned GridSearchCV Parameters &amp; Independent 10-Class Multiclass Summary</strong></summary>
 
 - **Logistic Regression (`GridSearchCV` F1 = `0.9548`):** `C=10.0`, `class_weight=None`, `solver='liblinear'`
 - **Decision Tree (`GridSearchCV` F1 = `0.9563`):** `criterion='entropy'`, `max_depth=None`, `min_samples_leaf=1`, `min_samples_split=2`
 - **Random Forest (`GridSearchCV` F1 = `0.9632`):** `max_depth=25`, `min_samples_leaf=1`, `min_samples_split=2`, `n_estimators=100`
 
-**Independent 10-Class `attack_cat` Model (`Normal`, `Generic`, `Exploits`, `Fuzzers`, `DoS`, `Reconnaissance`, `Analysis`, `Backdoor`, `Shellcode`, `Worms`):**
-- **Selected Model:** Random Forest Classifier (`accuracy = 0.6774`, `macro_f1 = 0.5029`, `weighted_f1 = 0.7325`, `macro_recall = 0.6387`, `macro_precision = 0.5162`, inference latency `9.775 ms / 1k`).
+**Independent 10-Class `attack_cat` Classifier (`Normal`, `Generic`, `Exploits`, `Fuzzers`, `DoS`, `Reconnaissance`, `Analysis`, `Backdoor`, `Shellcode`, `Worms`):**
+- **Winner:** Random Forest Classifier — `accuracy = 0.6774`, `macro_f1 = 0.5029`, `weighted_f1 = 0.7325`, `macro_recall = 0.6387`, `macro_precision = 0.5162`, inference latency `9.775 ms / 1k`.
 
 </details>
 
 ---
 
-## Dataset Overview
+<a id="visual-analytics-gallery"></a>
+## Visual Analytics Gallery
 
-Source: **UNSW-NB15** *(Australian Centre for Cyber Security — Moustafa & Slay, 2015/2016)*. Original files remain read-only under `dataset/raw/`.
+Featured outputs generated directly by `python main.py run-eda`, `python main.py evaluate`, and `python main.py train-multiclass` (`reports/graphs/`):
 
-| Partition / Artifact | Location (`dataset/raw/`) | Dimensions | Class Breakdown / Notes |
+<p align="center">
+  <img src="reports/graphs/09_confusion_matrices_binary.png" alt="Untouched Test Set Confusion Matrices Across All 3 Classifiers" width="100%" />
+  <br />
+  <sub><b>1. Untouched Test Confusion Matrices (N = 82,332):</b> Random Forest achieves 97.05% Attack Recall with only 1,338 False Negatives (2.95% FNR).</sub>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="reports/graphs/12_model_metrics_comparison.png" alt="Model Performance Comparison Across Cybersecurity Metrics" width="100%" />
+      <br />
+      <sub><b>2. Cybersecurity Metrics Benchmark:</b> Side-by-side comparison across Recall, Precision, F1, Accuracy, Specificity, and FNR.</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="reports/graphs/10_roc_curves_binary.png" alt="ROC Curve Comparison on UNSW-NB15 Test Set" width="100%" />
+      <br />
+      <sub><b>3. ROC Curve Comparison:</b> Random Forest (AUC = 0.9837) vs Logistic Regression (0.9558) vs Decision Tree (0.8588).</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="reports/graphs/02_attack_category_distribution.png" alt="UNSW-NB15 Attack Category Distribution" width="100%" />
+      <br />
+      <sub><b>4. Training Attack Distribution (N = 175,341):</b> Record frequency across Normal traffic and 9 UNSW-NB15 attack families.</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="reports/graphs/07_correlation_heatmap.png" alt="Correlation Heatmap of Top 15 Features vs Target" width="100%" />
+      <br />
+      <sub><b>5. Top-15 Feature Correlation Heatmap:</b> Highlights dominant target signals including <code>sttl</code> (0.69) and <code>ct_state_ttl</code> (0.58).</sub>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="reports/graphs/13_multiclass_confusion_matrix.png" alt="Multiclass Attack Classification Confusion Matrix (Random Forest)" width="78%" />
+  <br />
+  <sub><b>6. Independent 10-Class <code>attack_cat</code> Confusion Matrix (Row-Normalized):</b> Strong separation on Generic (96%), Shellcode (95%), Worms (86%), and Reconnaissance (85%).</sub>
+</p>
+
+---
+
+<a id="dataset-overview"></a>
+## UNSW-NB15 Dataset Overview
+
+Source: **UNSW-NB15** *(Australian Centre for Cyber Security — Moustafa & Slay, 2015/2016)*. Original files are preserved read-only under `dataset/raw/`.
+
+| Partition / Artifact | Path under `dataset/raw/` | Dimensions | Breakdown & Notes |
 | :--- | :--- | :---: | :--- |
 | **Predefined Training Set** | `csv/Training and Testing Sets/UNSW_NB15_training-set.csv` | `175,341 × 45` | `119,341` Malicious (`68.06%`), `56,000` Normal (`31.94%`), `0` nulls |
 | **Predefined Testing Set** | `csv/Training and Testing Sets/UNSW_NB15_testing-set.csv` | `82,332 × 45` | `45,332` Malicious (`55.06%`), `37,000` Normal (`44.94%`), `0` nulls |
-| **4 Raw Split CSVs** | `csv/UNSW-NB15_1.csv` – `4.csv` | `49` cols | Headerless raw partitions retained for chunked streaming experiments |
-| **Metadata & Docs** | `csv/NUSW-NB15_*.csv`, `documentation/*.pdf` | — | `latin1` feature descriptions (`45` mapped cols), GT & event lists |
+| **Raw Split Partitions** | `csv/UNSW-NB15_1.csv` – `4.csv` | `49` cols | Headerless raw splits preserved for chunked processing experiments |
+| **Catalog & Docs** | `csv/NUSW-NB15_*.csv`, `documentation/*.pdf` | — | `latin1` feature descriptions (`45` mapped cols), GT & event references |
 
 <details>
-<summary><strong>Verified Data Integrity Findings Handled Automatically</strong></summary>
+<summary><strong>Schema Anomalies &amp; Data Integrity Safeguards</strong></summary>
 
-- **`service` Unspecified Placeholder:** Encoded as `'-'` (`94,168` training rows; `47,153` test rows) and preserved as a valid explicit category.
-- **Unseen Test Categories:** Testing `state` introduces `['ACC', 'CLO']` absent from training data; `OneHotEncoder(handle_unknown="ignore")` handles them safely without crashing inference.
-- **Flow Signature Overlaps:** Removing IP/port/timestamp fields (`srcip`, `sport`, `dstip`, `dsport`, `Stime`, `Ltime`) creates `229` conflicting feature-signature groups in training and `8,541` overlapping signatures between train and test, limiting minority multiclass separability (`Analysis`, `Backdoor`, `DoS`).
+- **Explicit Placeholder Handling:** `service = '-'` occurs in `94,168` training flows and `47,153` test flows and is retained as a dedicated categorical level.
+- **Unseen Categorical States:** Test records contain `state` values `['ACC', 'CLO']` absent during training; `OneHotEncoder(handle_unknown="ignore")` handles them cleanly without inference failures.
+- **Duplicate Feature Signatures:** Dropping IP/port/timestamp columns in the predefined UNSW-NB15 benchmark introduces `229` conflicting feature groups in training and `8,541` overlapping signatures across splits.
 
 </details>
 
@@ -125,20 +212,21 @@ Source: **UNSW-NB15** *(Australian Centre for Cyber Security — Moustafa & Slay
 
 ## Technology Stack
 
-| Layer | Verified Libraries & Runtime |
+| Layer | Verified Versions |
 | :--- | :--- |
-| **Language & Environment** | Python `3.12.10` (`>=3.12,<3.13`), Git |
+| **Runtime & VCS** | Python `3.12.10` (`>=3.12,<3.13`), Git |
 | **Data & Numerics** | `pandas==3.1.1`, `numpy==2.5.5` |
-| **Machine Learning** | `scikit-learn==1.9.1`, `joblib==1.6.0` |
-| **Visual Analytics** | `matplotlib==3.11.2`, `seaborn==0.13.2`, `plotly==7.2.0` |
-| **Web UI & Persistence** | `streamlit==1.67.0`, `sqlite3` (Python stdlib `3.49.1`) |
-| **Testing & Quality** | `pytest==9.2.0` |
+| **ML & Persistence** | `scikit-learn==1.9.1`, `joblib==1.6.0` |
+| **Visualization** | `matplotlib==3.11.2`, `seaborn==0.13.2`, `plotly==7.2.0` |
+| **Dashboard & Storage** | `streamlit==1.67.0`, `sqlite3` (stdlib `3.49.1`) |
+| **Testing** | `pytest==9.2.0` (`48` passing tests) |
 
 ---
 
-## Installation & Setup (Windows)
+<a id="quickstart-and-cli"></a>
+## Quickstart & CLI Reference (Windows)
 
-### 1. Environment Installation
+### 1. Setup & Environment Verification
 
 ```powershell
 git clone https://github.com/Deb-Kumar/NETGUARD-AI.git
@@ -148,84 +236,62 @@ py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 
-# Optional: configure local overrides (NETGUARD_N_JOBS, NETGUARD_MAX_UPLOAD_MB, NETGUARD_LOG_LEVEL)
+# Optional local overrides (NETGUARD_N_JOBS, NETGUARD_MAX_UPLOAD_MB, NETGUARD_LOG_LEVEL)
 Copy-Item .env.example .env
 
-# Verify Python version, dependencies, and dataset paths
+# Verify Python 3.12 runtime, packages, and UNSW-NB15 dataset discovery
 python main.py check-env
 ```
 
-### 2. Dataset Placement
+> [!TIP]
+> Keep original UNSW-NB15 CSV files in `dataset/raw/csv/` (and `Training and Testing Sets/` inside it) and PDF docs in `dataset/raw/documentation/`. Legacy root and `dataset/raw/` locations remain supported fallbacks via `resolve_dataset_file()`.
 
-Place the official **UNSW-NB15** CSV files inside `dataset/raw/csv/` (with predefined splits in `dataset/raw/csv/Training and Testing Sets/`) and documentation PDFs inside `dataset/raw/documentation/`. Legacy root and `dataset/raw/` locations remain supported fallbacks via `resolve_dataset_file()`.
+### 2. Command Reference
 
----
+| Command | Stage | Output Location |
+| :--- | :--- | :--- |
+| `python main.py inspect-data --save-report` | Dataset profiling & validation | `reports/experiments/dataset_inspection_report.json` |
+| `python main.py run-eda` | Statistical & visual EDA | `reports/experiments/eda_summary.json` & `reports/graphs/01..08*.png` |
+| `python main.py train` | Binary baseline + `class_weight` study | `models/binary/*.joblib` & `binary_training_summary.json` |
+| `python main.py cross-validate --n-splits 5` | 5-Fold Stratified CV (`175,341` rows) | `models/metadata/cv_results.json` |
+| `python main.py tune --cv-folds 5 --scoring f1 --max-tuning-samples 50000` | Bounded `GridSearchCV` + full refit | `models/metadata/tuning_results.json` & updated models |
+| `python main.py select-best --strategy cybersecurity_composite` | Validation selection + final test eval | `models/binary/best_model.joblib` & `model_metadata.json` |
+| `python main.py evaluate` | Untouched test eval + plots `09`–`12` | `binary_evaluation_results.json` & `reports/graphs/09..12*.png` |
+| `python main.py train-multiclass` | Independent 10-class `attack_cat` pipeline | `models/multiclass/*.joblib` & `13_multiclass_confusion_matrix.png` |
 
-## CLI Workflow & Usage
-
-### Data Inspection & Exploratory Analysis
-
-```powershell
-python main.py inspect-data --save-report
-python main.py run-eda
-```
-
-### Training, Cross-Validation, Tuning & Selection
-
-```powershell
-# Train baseline binary pipelines + class_weight study
-python main.py train
-
-# Run 5-fold Stratified Cross-Validation on full training set (175,341 rows)
-python main.py cross-validate --n-splits 5
-
-# Run GridSearchCV on 50,000 stratified training subset & refit on full 175,341 rows
-python main.py tune --cv-folds 5 --scoring f1 --max-tuning-samples 50000
-
-# Select best model from validation scores & run final evaluation on untouched test set
-python main.py select-best --strategy cybersecurity_composite
-
-# Train & evaluate independent 10-class attack_cat classifier
-python main.py train-multiclass
-```
-
-### Evaluation & Automated Testing
+<a id="evaluation--automated-testing"></a>
+### 3. Run Automated Tests & Launch Dashboard
 
 ```powershell
-# Re-evaluate saved binary models on untouched test partition & regenerate charts
-python main.py evaluate
-
-# Run complete 48-test automated verification suite (unit, integration, security, UI & E2E)
+# Execute complete 48-test suite (unit, integration, security, UI & E2E)
 pytest
-```
 
-### Launch Web Dashboard
-
-```powershell
-.venv\Scripts\activate
+# Start the 16-page Streamlit cybersecurity dashboard
 streamlit run app/app.py
 ```
 
 ---
 
+<a id="streamlit-command-center"></a>
 ## Streamlit Command Center (16 Pages)
 
-Structured using `st.navigation` across 5 operational sections in [app/app.py](app/app.py):
+Organized into 5 operational workspaces using `st.navigation` in [app/app.py](app/app.py):
 
-| Workspace Group | Pages Included |
+| Workspace Group | Available Pages |
 | :--- | :--- |
 | **Command Center** | `Dashboard` |
-| **Dataset & Analytics** | `Dataset Management`, `Dataset Explorer`, `EDA and Analytics`, `Data Preprocessing` |
-| **ML Pipeline** | `Model Training`, `Model Evaluation`, `Cross-Validation`, `Hyperparameter Tuning`, `Model Comparison` |
-| **Threat Prediction** | `Single Traffic Prediction`, `Batch CSV Prediction` |
-| **Logs, Reports & System** | `Prediction History`, `Reports and Exports`, `About Project`, `Settings` |
+| **Dataset & Analytics** | `Dataset Management` · `Dataset Explorer` · `EDA and Analytics` · `Data Preprocessing` |
+| **ML Pipeline** | `Model Training` · `Model Evaluation` · `Cross-Validation` · `Hyperparameter Tuning` · `Model Comparison` |
+| **Threat Prediction** | `Single Traffic Prediction` · `Batch CSV Prediction` |
+| **Logs, Reports & System** | `Prediction History` · `Reports and Exports` · `About Project` · `Settings` |
 
 ---
 
+<a id="project-structure"></a>
 ## Project Structure
 
 <details>
-<summary><strong>Click to expand complete directory layout</strong></summary>
+<summary><strong>Click to expand organized repository tree</strong></summary>
 
 ```text
 NETGUARD-AI/
@@ -302,6 +368,7 @@ NETGUARD-AI/
 
 ---
 
+<a id="documentation-and-reports"></a>
 ## Documentation & Visual Reports
 
 - **Project Reports:**
@@ -311,23 +378,23 @@ NETGUARD-AI/
   - [Final Engineering Audit Suite (`reports/final_audit/`)](reports/final_audit/00_overall_audit_summary.md)
 
 <details>
-<summary><strong>13 Generated Charts & Visual Reports (<code>reports/graphs/</code>)</strong></summary>
+<summary><strong>Complete Catalog of 13 Generated Charts (<code>reports/graphs/</code>)</strong></summary>
 
-| # | Filename | Description |
+| # | Chart File | Description |
 | :-: | :--- | :--- |
 | `01` | `01_binary_class_distribution.png` | Binary Normal vs Malicious class distribution |
-| `02` | `02_attack_category_distribution.png` | 10-class `attack_cat` frequency distribution |
+| `02` | [`02_attack_category_distribution.png`](reports/graphs/02_attack_category_distribution.png) | 10-class `attack_cat` frequency distribution *(featured above)* |
 | `03` | `03_protocol_distribution.png` | Top 10 network protocols by traffic class |
 | `04` | `04_service_distribution.png` | Top services by traffic class (including `'-'`) |
 | `05` | `05_numerical_feature_distributions.png` | `log1p` feature distributions (`30,000` stratified sample) |
 | `06` | `06_outlier_boxplots.png` | Class-wise outlier box plots (`20,000` stratified sample) |
-| `07` | `07_correlation_heatmap.png` | Correlation heatmap of top 15 features vs `label` |
+| `07` | [`07_correlation_heatmap.png`](reports/graphs/07_correlation_heatmap.png) | Correlation heatmap of top 15 features vs `label` *(featured above)* |
 | `08` | `08_state_distribution.png` | Connection states across traffic classes |
-| `09` | `09_confusion_matrices_binary.png` | Untouched test confusion matrices across all 3 models |
-| `10` | `10_roc_curves_binary.png` | Overlaid ROC curves across classifiers |
+| `09` | [`09_confusion_matrices_binary.png`](reports/graphs/09_confusion_matrices_binary.png) | Untouched test confusion matrices across all 3 models *(featured above)* |
+| `10` | [`10_roc_curves_binary.png`](reports/graphs/10_roc_curves_binary.png) | Overlaid ROC curves across classifiers *(featured above)* |
 | `11` | `11_pr_curves_binary.png` | Overlaid Precision-Recall curves across classifiers |
-| `12` | `12_model_metrics_comparison.png` | Multi-metric cybersecurity bar comparison |
-| `13` | `13_multiclass_confusion_matrix.png` | 10-class row-normalized confusion matrix |
+| `12` | [`12_model_metrics_comparison.png`](reports/graphs/12_model_metrics_comparison.png) | Multi-metric cybersecurity bar comparison *(featured above)* |
+| `13` | [`13_multiclass_confusion_matrix.png`](reports/graphs/13_multiclass_confusion_matrix.png) | 10-class row-normalized confusion matrix *(featured above)* |
 
 </details>
 
@@ -335,23 +402,27 @@ NETGUARD-AI/
 
 ## Limitations & Roadmap
 
-### Known Limitations
-- **Offline Flow Analysis:** Evaluates stored flow records/CSVs rather than real-time NIC packet sniffing or firewall enforcement.
-- **Multiclass Feature Overlap:** Because UNSW-NB15 predefined splits omit IP, port, and timestamp identifiers, single-flow telemetry exhibits overlapping signatures across minority attack families (`Analysis`, `Backdoor`, `DoS`).
-
-### Future Enhancements
-- Streaming adapter for Zeek / Argus / PCAP flow ingestion
-- Per-prediction feature attribution (SHAP / permutation explanations) and data-drift monitoring
-- Role-based dashboard authentication and SIEM webhook alerting
+- **Known Limitations:**
+  - Operates offline on UNSW-NB15 flow records and CSV uploads rather than live packet capture.
+  - Predefined UNSW-NB15 splits omit IP/port/timestamp attributes, leaving overlapping feature signatures across minority attack families (`Analysis`, `Backdoor`, `DoS`).
+- **Planned Enhancements:**
+  - Streaming flow adapters (PCAP / Zeek / Argus ingestion)
+  - Per-prediction SHAP / permutation feature attributions and concept-drift checks
+  - Multi-user authentication and SIEM webhook alerting
 
 ---
 
+<div align="center">
+
 ## License & Credits
 
-- **Software License:** Released under the [MIT License](LICENSE).
-- **Dataset Attribution:** UNSW-NB15 is provided for academic research by the Australian Centre for Cyber Security (ACCS) — Moustafa & Slay (2015, 2016).
-- **Academic Project Details:**
-  - **Project Type:** MCA Final-Year Project-Based Learning (PBL)
-  - **Student / Team Members:** *[Insert Name(s) and Roll Number(s)]*
-  - **Faculty Guide:** *[Insert Faculty Guide Name]*
-  - **Department & Institution:** *[Insert Department & University Name]*
+Released under the **[MIT License](LICENSE)** · Dataset: **UNSW-NB15** *(Australian Centre for Cyber Security — Moustafa & Slay, 2015/2016)*
+
+| Academic Detail | Entry |
+| :--- | :--- |
+| **Project Type** | MCA Final-Year Project-Based Learning (PBL) |
+| **Student / Team** | *[Insert Name(s) and Roll Number(s)]* |
+| **Faculty Guide** | *[Insert Faculty Guide Name]* |
+| **Department & Institution** | *[Insert Department & University Name]* |
+
+</div>

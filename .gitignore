@@ -56,6 +56,12 @@ database/*.db
 database/*.db-*
 database/*.sqlite*
 
-# Generated large graph images (preserve directory placeholder)
+# Generated graph images (ignore temporary/bulk plots; track 6 featured README showcase charts)
 reports/graphs/*
 !reports/graphs/.gitkeep
+!reports/graphs/02_attack_category_distribution.png
+!reports/graphs/07_correlation_heatmap.png
+!reports/graphs/09_confusion_matrices_binary.png
+!reports/graphs/10_roc_curves_binary.png
+!reports/graphs/12_model_metrics_comparison.png
+!reports/graphs/13_multiclass_confusion_matrix.png
