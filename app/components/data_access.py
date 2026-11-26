@@ -13,8 +13,9 @@ from src.data.loader import (
     DatasetLoadError,
     get_feature_metadata_map,
     load_csv_dataset,
+    stratified_sample_df,
 )
-from src.utils.config import get_paths
+from src.utils.config import BINARY_TARGET_COLUMN, RANDOM_STATE, get_paths
 
 
 @st.cache_data(show_spinner=False)
@@ -40,6 +41,26 @@ def load_sample_split(split: str = "train", nrows: int = 5000) -> pd.DataFrame |
         return None
     try:
         return load_csv_dataset(target, has_header=True, nrows=nrows, downcast_numeric=True)
+    except DatasetLoadError:
+        return None
+
+
+@st.cache_data(show_spinner=False)
+def load_stratified_test_sample(nrows: int = 400) -> pd.DataFrame | None:
+    """Load a reproducible stratified sample across the full UNSW-NB15 testing split."""
+    paths = get_paths()
+    target = paths.test_dataset_path
+    if target is None or not target.is_file():
+        return None
+    try:
+        full_test = load_csv_dataset(target, has_header=True, downcast_numeric=True)
+        sampled, _ = stratified_sample_df(
+            full_test,
+            max_samples=nrows,
+            stratify_col=BINARY_TARGET_COLUMN,
+            random_state=RANDOM_STATE,
+        )
+        return sampled
     except DatasetLoadError:
         return None
 

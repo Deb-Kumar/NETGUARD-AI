@@ -11,7 +11,7 @@ from app.components.data_access import (
     get_categorical_value_choices,
     load_feature_descriptions_map,
     load_json_artifact,
-    load_sample_split,
+    load_stratified_test_sample,
 )
 from app.styles.theme import render_page_header, render_setup_message
 from src.data.validator import PREDEFINED_FEATURE_COLUMNS
@@ -110,10 +110,12 @@ def render_single_prediction() -> None:
 
     prefill_row: dict[str, object] = {}
     reference_label_info: str | None = None
+    matched_gt_label: int | None = None
+    matched_gt_cat: str | None = None
     record_ref = "manual-single-flow"
 
     if init_mode == "Inspect Actual Test Set Record":
-        test_sample = load_sample_split("test", nrows=500)
+        test_sample = load_stratified_test_sample(nrows=400)
         if test_sample is not None and not test_sample.empty:
             with init_col2:
                 filter_cls = st.selectbox(
@@ -127,16 +129,22 @@ def render_single_prediction() -> None:
                     subset = test_sample[test_sample["label"] == 1]
 
                 if not subset.empty:
+                    row_labels = {
+                        int(r["id"]): f"Test Row id={int(r['id'])} ({r['proto']} / {r['service']} / {r['state']})"
+                        for _, r in subset.iterrows()
+                    }
                     row_idx = st.selectbox(
                         "Choose Actual UNSW-NB15 Testing Row (by id)",
-                        subset["id"].tolist(),
-                        format_func=lambda rid: f"Test Row id={rid}",
+                        list(row_labels.keys()),
+                        format_func=lambda rid: row_labels.get(rid, f"Test Row id={rid}"),
                     )
                     matched = subset[subset["id"] == row_idx].iloc[0]
                     prefill_row = matched[list(PREDEFINED_FEATURE_COLUMNS)].to_dict()
+                    matched_gt_label = int(matched["label"])
+                    matched_gt_cat = str(matched["attack_cat"])
                     reference_label_info = (
                         f"Actual Test Ground Truth for `id={row_idx}`: "
-                        f"label=`{matched['label']}` | attack_cat=`{matched['attack_cat']}`"
+                        f"label=`{matched_gt_label}` | attack_cat=`{matched_gt_cat}`"
                     )
                     record_ref = f"test-id-{row_idx}"
                 else:
@@ -268,6 +276,24 @@ def render_single_prediction() -> None:
                 "Multiclass Category",
                 result.multiclass_attack_category or "Not Trained",
             )
+            if matched_gt_label is not None:
+                gt_name = "Malicious Traffic (1)" if matched_gt_label == 1 else "Normal Traffic (0)"
+                if result.predicted_label == matched_gt_label:
+                    st.success(
+                        f"Matches UNSW-NB15 ground truth: {gt_name} | attack_cat={matched_gt_cat}."
+                    )
+                elif matched_gt_label == 0:
+                    st.warning(
+                        f"False Positive on this UNSW-NB15 flow (Actual: {gt_name} | attack_cat={matched_gt_cat}). "
+                        "Short UDP/INT or high-TTL normal flows can statistically overlap attack signatures "
+                        "(full untouched test Specificity: 82.10%, Attack Recall: 97.05%)."
+                    )
+                else:
+                    st.warning(
+                        f"False Negative on this UNSW-NB15 flow (Actual: {gt_name} | attack_cat={matched_gt_cat}). "
+                        "Some flows collide with benign signatures after IP/port removal "
+                        "(full untouched test False Negative Rate: 2.95%)."
+                    )
             st.caption(f"Timestamp (UTC): {result.timestamp_utc} | Logged to SQLite prediction history.")
 
             for warn in result.warnings:

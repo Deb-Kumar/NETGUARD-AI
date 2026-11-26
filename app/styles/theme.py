@@ -26,6 +26,13 @@ def apply_cyber_theme() -> None:
                 background-color: {COLOR_BG};
                 color: {COLOR_TEXT};
             }}
+            code, [data-testid="stAlert"] code {{
+                background-color: rgba(15, 23, 42, 0.9);
+                color: #93C5FD;
+                padding: 0.12rem 0.35rem;
+                border-radius: 4px;
+                border: 1px solid rgba(59, 130, 246, 0.3);
+            }}
             [data-testid="stSidebar"] {{
                 background-color: #070D1A;
                 border-right: 1px solid {COLOR_BORDER};
