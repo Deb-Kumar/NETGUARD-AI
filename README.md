@@ -418,11 +418,4 @@ NETGUARD-AI/
 
 Released under the **[MIT License](LICENSE)** · Dataset: **UNSW-NB15** *(Australian Centre for Cyber Security — Moustafa & Slay, 2015/2016)*
 
-| Academic Detail | Entry |
-| :--- | :--- |
-| **Project Type** | MCA Final-Year Project-Based Learning (PBL) |
-| **Student / Team** | *[Insert Name(s) and Roll Number(s)]* |
-| **Faculty Guide** | *[Insert Faculty Guide Name]* |
-| **Department & Institution** | *[Insert Department & University Name]* |
-
 </div>
