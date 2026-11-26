@@ -51,3 +51,18 @@ getattr(importlib.import_module({module_name!r}), {func_name!r})()
     at = AppTest.from_string(script, default_timeout=30)
     at.run()
     assert not at.exception
+
+
+def test_stratified_ui_samples_avoid_sequential_class_skew() -> None:
+    from app.components.data_access import load_stratified_split_sample, load_stratified_test_sample
+
+    train_sample = load_stratified_split_sample(split="train", nrows=2500)
+    assert train_sample is not None
+    assert set(train_sample["label"].unique()) == {0, 1}
+    assert train_sample["attack_cat"].nunique() == 10
+    assert train_sample["label"].head(300).nunique() == 2
+
+    test_sample = load_stratified_test_sample(nrows=400)
+    assert test_sample is not None
+    assert set(test_sample["label"].unique()) == {0, 1}
+    assert test_sample["attack_cat"].nunique() == 10

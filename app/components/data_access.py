@@ -15,7 +15,12 @@ from src.data.loader import (
     load_csv_dataset,
     stratified_sample_df,
 )
-from src.utils.config import BINARY_TARGET_COLUMN, RANDOM_STATE, get_paths
+from src.utils.config import (
+    BINARY_TARGET_COLUMN,
+    MULTICLASS_TARGET_COLUMN,
+    RANDOM_STATE,
+    get_paths,
+)
 
 
 @st.cache_data(show_spinner=False)
@@ -46,23 +51,34 @@ def load_sample_split(split: str = "train", nrows: int = 5000) -> pd.DataFrame |
 
 
 @st.cache_data(show_spinner=False)
-def load_stratified_test_sample(nrows: int = 400) -> pd.DataFrame | None:
-    """Load a reproducible stratified sample across the full UNSW-NB15 testing split."""
+def load_stratified_split_sample(split: str = "train", nrows: int = 2500) -> pd.DataFrame | None:
+    """Load a reproducible shuffled stratified sample across attack categories."""
     paths = get_paths()
-    target = paths.test_dataset_path
+    target = paths.train_dataset_path if split == "train" else paths.test_dataset_path
     if target is None or not target.is_file():
         return None
     try:
-        full_test = load_csv_dataset(target, has_header=True, downcast_numeric=True)
+        full_df = load_csv_dataset(target, has_header=True, downcast_numeric=False)
+        strat_col = (
+            MULTICLASS_TARGET_COLUMN
+            if MULTICLASS_TARGET_COLUMN in full_df.columns
+            else BINARY_TARGET_COLUMN
+        )
         sampled, _ = stratified_sample_df(
-            full_test,
+            full_df,
             max_samples=nrows,
-            stratify_col=BINARY_TARGET_COLUMN,
+            stratify_col=strat_col,
             random_state=RANDOM_STATE,
         )
-        return sampled
+        return sampled.sample(frac=1.0, random_state=RANDOM_STATE).reset_index(drop=True)
     except DatasetLoadError:
         return None
+
+
+@st.cache_data(show_spinner=False)
+def load_stratified_test_sample(nrows: int = 400) -> pd.DataFrame | None:
+    """Load a reproducible stratified sample across the full UNSW-NB15 testing split."""
+    return load_stratified_split_sample(split="test", nrows=nrows)
 
 
 @st.cache_data(show_spinner=False)

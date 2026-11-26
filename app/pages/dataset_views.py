@@ -8,7 +8,7 @@ import streamlit as st
 from app.components.data_access import (
     load_feature_descriptions_map,
     load_json_artifact,
-    load_sample_split,
+    load_stratified_split_sample,
 )
 from app.styles.theme import render_page_header, render_setup_message
 from src.utils.config import get_paths
@@ -85,7 +85,10 @@ def render_dataset_management() -> None:
             for col, info in sorted(feat_map.items())
             if not query or query.lower() in col.lower() or query.lower() in info["description"].lower()
         ]
-        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+        if rows:
+            st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+        else:
+            st.info("No feature descriptions match your search query.")
     else:
         st.info("NUSW-NB15_features.csv could not be loaded.")
 
@@ -103,12 +106,14 @@ def render_dataset_explorer() -> None:
     with c2:
         sample_n = st.slider("Preview Sample Rows (for responsive UI)", min_value=500, max_value=10000, value=2500, step=500)
 
-    df = load_sample_split(split=split, nrows=sample_n)
+    df = load_stratified_split_sample(split=split, nrows=sample_n)
     if df is None:
         st.error(f"Could not load UNSW-NB15 {split}ing dataset CSV.")
         return
 
-    st.caption(f"Displaying sample of first {len(df):,} rows from the predefined {split}ing set.")
+    st.caption(
+        f"Displaying stratified sample of {len(df):,} rows across attack categories from the predefined {split}ing set."
+    )
 
     f1, f2, f3, f4 = st.columns(4)
     with f1:

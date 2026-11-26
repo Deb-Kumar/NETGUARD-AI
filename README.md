@@ -10,7 +10,7 @@
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.9.1-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.67.0-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Dataset](https://img.shields.io/badge/Dataset-UNSW--NB15-0EA5E9?style=for-the-badge)](#dataset-overview)
-[![Tests](https://img.shields.io/badge/Pytest-49%20Passed-10B981?style=for-the-badge&logo=pytest&logoColor=white)](#evaluation--automated-testing)
+[![Tests](https://img.shields.io/badge/Pytest-50%20Passed-10B981?style=for-the-badge&logo=pytest&logoColor=white)](#evaluation--automated-testing)
 [![License](https://img.shields.io/badge/License-MIT-6366F1?style=for-the-badge)](LICENSE)
 
 <p>
@@ -46,7 +46,7 @@
       <sub><b>Missed-Attack Rate</b><br />Best Composite Score: 0.97131</sub>
     </td>
     <td align="center" width="25%">
-      <h3>✅ 49 / 49</h3>
+      <h3>✅ 50 / 50</h3>
       <sub><b>Automated Pytest Suite</b><br />16 Streamlit Pages Verified</sub>
     </td>
   </tr>
@@ -219,7 +219,7 @@ Source: **UNSW-NB15** *(Australian Centre for Cyber Security — Moustafa & Slay
 | **ML & Persistence** | `scikit-learn==1.9.1`, `joblib==1.6.0` |
 | **Visualization** | `matplotlib==3.11.2`, `seaborn==0.13.2`, `plotly==7.2.0` |
 | **Dashboard & Storage** | `streamlit==1.67.0`, `sqlite3` (stdlib `3.49.1`) |
-| **Testing** | `pytest==9.2.0` (`49` passing tests) |
+| **Testing** | `pytest==9.2.0` (`50` passing tests) |
 
 ---
 
@@ -263,7 +263,7 @@ python main.py check-env
 ### 3. Run Automated Tests & Launch Dashboard
 
 ```powershell
-# Execute complete 49-test suite (unit, integration, security, UI & E2E)
+# Execute complete 50-test suite (unit, integration, security, UI & E2E)
 pytest
 
 # Start the 16-page Streamlit cybersecurity dashboard
@@ -354,7 +354,7 @@ NETGUARD-AI/
 │   ├── preprocessing/                  # NetworkFeatureEngineer & ColumnTransformer builders
 │   ├── training/                       # Train, Stratified CV, GridSearchCV, selector & multiclass
 │   └── utils/                          # Central paths/env config (config.py) & logging (logger.py)
-├── tests/                              # 49 automated pytest checks (unit, security, UI, E2E)
+├── tests/                              # 50 automated pytest checks (unit, security, UI, E2E)
 ├── .env.example
 ├── .gitignore
 ├── LICENSE
